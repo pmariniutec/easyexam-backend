@@ -1,14 +1,16 @@
 # Easy Exam REST API
 ### SpringBoot + JPA + Postgres
 
-### TODO: Integrate ElasticSearch
+TODOS:
+-----
+- Integrate ElasticSearch
 
 Setup
 -----
 - Change database connection config in `src/main/resources/application.properties`
-- Install maven dependencies using IDE auto import or using the command ``mvn install``
+- Install maven dependencies ``mvn install``
 - Run the app using ``mvn spring-boot:run``
-- Browse ``http//localhost:8080/api/v1/users``
+- Browse ``http//localhost:8080/``
 - Create package for deployment using ``mvn package`` (change properties if required)
 
 Authentication
@@ -16,47 +18,31 @@ Authentication
 - JWT
 - Frontend should set a header: "Authorization: Bearer 'token'"
 
-API Doc & Sample
+API Doc & Sample (WIP)
 ----------------
-- List all users 
+- Login user
     ```
-    GET /api/v1/users
+    POST /api/auth/login
+    ```
+    Body:
+    ```
+    {
+        "email": "EMAIL",
+		"password": "PASSWORD"
+    }
     ```
 
 - Create new user 
     ```
-    POST /api/v1/users
+    POST /api/auth/register
     ```
 
     Body:
     ```
     {
-        "first_name": "First",
-        "last_name": "Last",
+        "name": "NAME",
         "email": "EMAIL",
+		"password": "PASSWORD",
+		"role": "ROLE"
     }
-    ```
-
-- Get specific user 
-    ```
-    GET /api/v1/users/1
-    ```
-
-- Update user
-    ```
-    PUT /api/v1/users
-    ```
-    Body:
-    ```
-    {
-        "id":1,
-        "name": "Jeffrey Way",
-        "email": "jeffrey@laracasts.com",
-        "mobile": "0123456789"
-    }
-    ```
-    
-- Delete user
-    ```
-    DELETE /api/v1/users/1
     ```

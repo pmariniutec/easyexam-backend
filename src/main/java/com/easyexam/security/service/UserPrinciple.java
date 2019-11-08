@@ -1,4 +1,4 @@
-package com.easyexam.service;
+package com.easyexam.security.service;
 
 import com.easyexam.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

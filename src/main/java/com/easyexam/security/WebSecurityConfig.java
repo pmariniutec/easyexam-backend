@@ -1,8 +1,8 @@
-package com.easyexam.config;
+package com.easyexam.security;
 
 import com.easyexam.security.jwt.JwtAuthEntryPoint;
 import com.easyexam.security.jwt.JwtAuthTokenFilter;
-import com.easyexam.service.UserDetailsServiceImpl;
+import com.easyexam.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

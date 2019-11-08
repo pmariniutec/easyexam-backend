@@ -1,6 +1,6 @@
-package com.easyexam.jwt;
+package com.easyexam.security.jwt;
 
-import com.easyexam.service.UserDetailsServiceImpl;
+import com.easyexam.security.service.UserDetailsServiceImpl;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

@@ -1,6 +1,5 @@
-package com.easyexam.auth.controller;
+package com.easyexam.controller;
 
-import com.easyexam.jwt.JwtUtils;
 import com.easyexam.message.request.LoginForm;
 import com.easyexam.message.request.RegisterForm;
 import com.easyexam.message.response.JwtResponse;
@@ -9,7 +8,9 @@ import com.easyexam.model.RoleName;
 import com.easyexam.model.User;
 import com.easyexam.repository.RoleRepository;
 import com.easyexam.repository.UserRepository;
+import com.easyexam.security.jwt.JwtUtils;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ public class AuthRestAPIs {
   @Autowired PasswordEncoder encoder;
 
   @Autowired JwtUtils jwtUtils;
+
+  @RequestMapping("/test")
+  public ResponseEntity<?> getAllUsers() {
+    List<Role> roles = roleRepository.findAll();
+    return ResponseEntity.ok(roles);
+  }
 
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {

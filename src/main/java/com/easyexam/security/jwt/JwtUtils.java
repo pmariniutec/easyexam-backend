@@ -1,6 +1,6 @@
-package com.easyexam.jwt;
+package com.easyexam.security.jwt;
 
-import com.easyexam.service.UserPrinciple;
+import com.easyexam.security.service.UserPrinciple;
 import io.jsonwebtoken.*;
 import java.util.Date;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.easyexam.jwt;
+package com.easyexam.security.jwt;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

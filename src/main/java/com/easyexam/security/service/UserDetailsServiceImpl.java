@@ -1,7 +1,8 @@
-package com.easyexam.service;
+package com.easyexam.security.service;
 
 import com.easyexam.model.User;
 import com.easyexam.repository.UserRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,16 +17,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   @Transactional
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
     User user =
         userRepository
-            .findByUsername(username)
+            .findByEmail(email)
             .orElseThrow(
                 () ->
                     new UsernameNotFoundException(
-                        "User Not Found with -> username or email : " + username));
+                        "User Not Found with -> email or email : " + email));
 
     return UserPrinciple.build(user);
+  }
+
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 }

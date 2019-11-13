@@ -1,0 +1,6 @@
+- pipeline.id: sync-questions
+  path.config: "logstash/logstash-questions.conf"
+  queue.type: persisted
+- pipeline.id: sync-solutions
+  path.config: "logstash/logstash-solutions.conf"
+  queue.type: persisted

@@ -58,8 +58,8 @@ public class AuthRestAPIs {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    String jwt = jwtUtils.generateJwtToken(authentication);
-    return ResponseEntity.ok(new JwtResponse(jwt));
+    String jwtToken = jwtUtils.generateJwtToken(authentication);
+    return ResponseEntity.ok(new JwtResponse(jwtToken));
   }
 
   @PostMapping("/register")
@@ -72,7 +72,8 @@ public class AuthRestAPIs {
     // Creating user account
     User user =
         new User(
-            registerRequest.getName(),
+            registerRequest.getFirstName(),
+            registerRequest.getLastName(),
             registerRequest.getEmail(),
             encoder.encode(registerRequest.getPassword()));
 

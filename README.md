@@ -1,48 +1,32 @@
 # Easy Exam REST API
 ### SpringBoot + JPA + Postgres
 
-TODOS:
------
-- Integrate ElasticSearch
+Dependencies
+------------
+- ElasticSearch
+- Logstash
+- Springboot
+- Maven
+- Java 13
 
 Setup
 -----
 - Change database connection config in `src/main/resources/application.properties`
+- Install ElasticSearch and Logstash (TODO: Add links)
 - Install maven dependencies ``mvn install``
-- Run the app using ``mvn spring-boot:run``
+- Run the server using ``mvn spring-boot:run``
 - Browse ``http//localhost:8080/``
 - Create package for deployment using ``mvn package`` (change properties if required)
+
+Sections
+--------
+- [Authentication API Docs](docs/auth/api.md)
+- [ElasticSearch and Logstash](docs/elasticsearch/README.md)
+
+
+#### Additional Notes:
 
 Authentication
 ----------------
 - JWT
-- Frontend should set a header: "Authorization: Bearer 'token'"
-
-API Doc & Sample (WIP)
-----------------
-- Login user
-    ```
-    POST /api/auth/login
-    ```
-    Body:
-    ```
-    {
-        "email": "EMAIL",
-		"password": "PASSWORD"
-    }
-    ```
-
-- Create new user 
-    ```
-    POST /api/auth/register
-    ```
-
-    Body:
-    ```
-    {
-        "name": "NAME",
-        "email": "EMAIL",
-		"password": "PASSWORD",
-		"role": "ROLE"
-    }
-    ```
+- Frontend should set the following header: "Authorization: Bearer 'token'"

@@ -1,5 +1,6 @@
 package com.easyexam.model;
 
+import com.easyexam.model.utils.TimestampedEntity;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -21,14 +22,18 @@ import org.hibernate.annotations.NaturalId;
 @Table(
     name = "users",
     uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
-public class User {
+public class User extends TimestampedEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @NotBlank
   @Size(min = 3, max = 50)
-  private String name;
+  private String firstName;
+
+  @NotBlank
+  @Size(min = 3, max = 50)
+  private String lastName;
 
   @NaturalId
   @NotBlank
@@ -49,8 +54,9 @@ public class User {
 
   public User() {}
 
-  public User(String name, String email, String password) {
-    this.name = name;
+  public User(String firstName, String lastName, String email, String password) {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.email = email;
     this.password = password;
   }
@@ -63,12 +69,24 @@ public class User {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return firstName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getFullName() {
+    return firstName + ' ' + lastName;
   }
 
   public String getEmail() {

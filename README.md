@@ -21,12 +21,13 @@ Setup
 Sections
 --------
 - [Authentication API Docs](docs/auth/api.md)
+- [Courses API](docs/courses/api.md)
+- [Exams API](docs/exams/api.md)
+- [Questions and Solutions API](docs/questions/api.md)
 - [ElasticSearch and Logstash](docs/elasticsearch/README.md)
 
 
-#### Additional Notes:
-
 Authentication
 ----------------
-- JWT
-- Frontend should set the following header: "Authorization: Bearer 'token'"
+- Json Web Token Authentication
+- Header structure: `Authorization: Bearer 'token'`

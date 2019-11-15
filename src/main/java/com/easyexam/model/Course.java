@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,12 +31,16 @@ public class Course extends TimestampedEntity {
   @Size(min = 5, max = 20)
   private String code;
 
+  @ManyToOne @NotBlank private User user;
+
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "course_exams",
       joinColumns = @JoinColumn(name = "course_id"),
       inverseJoinColumns = @JoinColumn(name = "exam_id"))
   private List<Exam> exams;
+
+  public Course() {}
 
   public Course(String name, String code) {
     this.name = name;
@@ -64,5 +69,17 @@ public class Course extends TimestampedEntity {
 
   public void setExams(List<Exam> exams) {
     this.exams = exams;
+  }
+
+  public void setExam(Exam exam) {
+    this.exams.add(exam);
+  }
+
+  public User getUser() {
+    return this.user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 }

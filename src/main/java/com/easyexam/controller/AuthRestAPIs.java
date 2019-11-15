@@ -10,7 +10,6 @@ import com.easyexam.repository.RoleRepository;
 import com.easyexam.repository.UserRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +41,6 @@ public class AuthRestAPIs {
 
   @Autowired JwtUtils jwtUtils;
 
-  @RequestMapping("/test")
-  public ResponseEntity<?> getAllUsers() {
-    List<Role> roles = roleRepository.findAll();
-    return ResponseEntity.ok(roles);
-  }
-
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
@@ -66,7 +59,7 @@ public class AuthRestAPIs {
   public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
 
     if (userRepository.existsByEmail(registerRequest.getEmail())) {
-      return new ResponseEntity<String>("Fail -> Email is already in use!", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<String>("Error: Email is already in use", HttpStatus.BAD_REQUEST);
     }
 
     // Creating user account
@@ -83,30 +76,27 @@ public class AuthRestAPIs {
     strRoles.forEach(
         role -> {
           switch (role) {
-            case "admin":
+            case "ROLE_ADMIN":
               Role adminRole =
                   roleRepository
                       .findByName(RoleName.ROLE_ADMIN)
-                      .orElseThrow(
-                          () -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                      .orElseThrow(() -> new RuntimeException("Error: User Role not found"));
               roles.add(adminRole);
 
               break;
-            case "student":
+            case "ROLE_STUDENT":
               Role studentRole =
                   roleRepository
                       .findByName(RoleName.ROLE_STUDENT)
-                      .orElseThrow(
-                          () -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                      .orElseThrow(() -> new RuntimeException("Error: User Role not found"));
               roles.add(studentRole);
 
               break;
-            case "teacher":
+            case "ROLE_TEACHER":
               Role teacherRole =
                   roleRepository
                       .findByName(RoleName.ROLE_TEACHER)
-                      .orElseThrow(
-                          () -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                      .orElseThrow(() -> new RuntimeException("Error: User Role not found"));
               roles.add(teacherRole);
 
               break;

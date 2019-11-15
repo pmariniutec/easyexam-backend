@@ -35,6 +35,8 @@ public class Rating {
   @Size(min = 0, max = 250)
   private String comment;
 
+  public Rating() {}
+
   public Rating(int score, String comment) {
     this.score = score;
     this.comment = comment;

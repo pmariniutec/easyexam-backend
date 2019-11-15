@@ -48,6 +48,8 @@ public class Exam extends TimestampedEntity {
   @CollectionTable(name = "keywords")
   private List<String> keywords = new ArrayList<>();
 
+  public Exam() {}
+
   public Exam(
       String title, List<Question> questions, List<Solution> solutions, List<String> keywords) {
     this.title = title;

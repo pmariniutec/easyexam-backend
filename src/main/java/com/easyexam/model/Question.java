@@ -32,6 +32,8 @@ public class Question extends TimestampedEntity {
   @ManyToMany(mappedBy = "questions")
   private List<Exam> exams = new ArrayList<>();
 
+  public Question() {}
+
   public Question(String title, String content) {
     this.title = title;
     this.content = content;

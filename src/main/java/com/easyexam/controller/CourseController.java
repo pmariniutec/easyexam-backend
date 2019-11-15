@@ -8,15 +8,13 @@ import com.easyexam.model.User;
 import com.easyexam.repository.CourseRepository;
 import com.easyexam.repository.ExamRepository;
 import com.easyexam.security.jwt.JwtUtils;
-import com.easyexam.security.service.UserDetailsServiceImpl;
+import com.easyexam.security.utils.AuthenticationUtils;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,36 +29,14 @@ public class CourseController {
 
   @Autowired CourseRepository courseRepository;
   @Autowired ExamRepository examRepository;
-
-  @Autowired UserDetailsServiceImpl userDetailsService;
+  @Autowired AuthenticationUtils authenticationUtils;
 
   @Autowired JwtUtils jwtUtils;
-
-  private User loadUserObject() {
-
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    String email;
-    if (principal instanceof UserDetails) {
-      email = ((UserDetails) principal).getUsername();
-    } else {
-      email = principal.toString();
-    }
-
-    User user = userDetailsService.getUserFromEmail(email);
-
-    return user;
-  }
 
   @GetMapping("")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
   public ResponseEntity<?> getUserCourses() {
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    String email;
-    if (principal instanceof UserDetails) {
-      email = ((UserDetails) principal).getUsername();
-    } else {
-      email = principal.toString();
-    }
+    String email = authenticationUtils.getAuthenticatedUserEmail();
 
     Optional<List<Course>> courses = courseRepository.findUserCourses(email);
     return ResponseEntity.ok(courses.get());
@@ -73,7 +49,7 @@ public class CourseController {
     Course course = new Course(createCourseRequest.getName(), createCourseRequest.getCode());
 
     // get authenticated user
-    User user = this.loadUserObject();
+    User user = authenticationUtils.getUserObject();
     course.setUser(user);
 
     courseRepository.save(course);

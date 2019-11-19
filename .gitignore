@@ -45,3 +45,5 @@ nbdist/
 .nb-gradle/
 
 .mvn/
+*.pem
+ssh-ec2

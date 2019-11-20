@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,5 +78,14 @@ public class CourseController {
 
     courseRepository.save(course);
     return ResponseEntity.ok().body("Successfully added exam to course");
+  }
+
+  @DeleteMapping("{courseId}")
+  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+  public ResponseEntity<?> addExamToCourse(@PathVariable String courseId) {
+    Long id = Long.valueOf(courseId);
+    courseRepository.deleteById(id);
+
+    return ResponseEntity.ok().body("Deleted course with id " + courseId);
   }
 }

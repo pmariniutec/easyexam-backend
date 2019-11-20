@@ -3,6 +3,7 @@ package com.easyexam.latex;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +13,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class LatexCompiler {
 
-  public final String BASE_PATH = "tex/files/";
+  public final File WORKING_DIRECTORY = new File(".");
+  public String BASE_PATH;
+
+  public LatexCompiler() {
+    try {
+      this.BASE_PATH = WORKING_DIRECTORY.getCanonicalPath() + "/tex/files/";
+    } catch (IOException e) {
+      System.out.println(e);
+    }
+  }
 
   public static byte[] toByteArray(InputStream in) throws IOException {
 
@@ -39,7 +49,8 @@ public class LatexCompiler {
 
     try {
       this.writeToFile(latexString, filename);
-      String command = "/usr/bin/pdflatex " + BASE_PATH + filename;
+      String command =
+          "/usr/bin/pdflatex -output-directory=" + BASE_PATH + " " + BASE_PATH + filename;
       Process process = Runtime.getRuntime().exec(command);
 
       BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));

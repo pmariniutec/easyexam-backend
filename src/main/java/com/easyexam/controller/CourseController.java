@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +39,18 @@ public class CourseController {
   public ResponseEntity<?> getUserCourses() {
     String email = authenticationUtils.getAuthenticatedUserEmail();
 
-    Optional<List<Course>> courses = courseRepository.findUserCourses(email);
-    return ResponseEntity.ok(courses.get());
+    List<Course> data = courseRepository.findUserCourses(email).get();
+
+    return ResponseEntity.ok(data);
+  }
+
+  @GetMapping("/{courseId}")
+  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+  public ResponseEntity<?> getCourseExams(@PathVariable String courseId) {
+    Long id = Long.valueOf(courseId);
+
+    Course course = courseRepository.findById(id).get();
+    return ResponseEntity.ok(course);
   }
 
   @PostMapping("/create")

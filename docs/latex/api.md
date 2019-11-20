@@ -3,7 +3,7 @@ Latex API Docs
 
 - Compile Latex
     ```
-    POST /api/exam/create
+    POST /api/latex/compile
     ```
 
 	Headers:
@@ -14,6 +14,7 @@ Latex API Docs
     Expects:
     ```
 	"LATEX STRING"
+	NOTE: Replace Newlines with \n
     ```
 
 	Returns:

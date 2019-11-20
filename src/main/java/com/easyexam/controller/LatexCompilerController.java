@@ -36,8 +36,7 @@ public class LatexCompilerController {
 
     if (result.exists()) {
       try {
-        InputStream inputStream =
-            new FileInputStream("/home/arpit/Documents/PCAP/dummyPath/" + filename);
+        InputStream inputStream = new FileInputStream(latexCompiler.BASE_PATH + filename);
         String type = result.toURI().toURL().openConnection().guessContentTypeFromName(filename);
 
         byte[] out = LatexCompiler.toByteArray(inputStream);
@@ -51,7 +50,9 @@ public class LatexCompilerController {
         System.out.println(e);
       }
     } else {
-      respEntity = new ResponseEntity<String>("File Not Found", HttpStatus.OK);
+      respEntity =
+          new ResponseEntity<String>(
+              "File Not Found. There was an error during compilation.", HttpStatus.OK);
     }
 
     return respEntity;

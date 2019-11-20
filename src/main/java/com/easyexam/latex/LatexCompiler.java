@@ -39,7 +39,7 @@ public class LatexCompiler {
 
     try {
       this.writeToFile(latexString, filename);
-      String command = "/usr/bin/pdflatex " + filename;
+      String command = "/usr/bin/pdflatex " + BASE_PATH + filename;
       Process process = Runtime.getRuntime().exec(command);
 
       BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));

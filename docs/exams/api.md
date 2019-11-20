@@ -9,7 +9,7 @@ Exams API Docs
     ```
     {
         "title": "TITLE",
-		"questions": [{question_object1}, {question_object2}, ...],
+		"questions": [{ "content": "CONTENT" }, { "content": "CONTENT" }, ...],
 		"keywords": ["key1", "key2", ...]
     }
     ```
@@ -30,12 +30,16 @@ Exams API Docs
 		{
 			"title": "Exam 1",
 			"questions": [...],
-			"keywords": [...]
+			"keywords": [...],
+			"created": "date",
+			"updated": "date",
 		},
 		{
 			"title": "Exam 2",
 			"questions": [...],
-			"keywords": [...]
+			"keywords": [...],
+			"created": "date",
+			"updated": "date",
 		},
 	]
 	```

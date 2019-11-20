@@ -45,14 +45,20 @@ Courses API Docs
 	```
 	[
 		{
+			"id": "id",
 			"name": "Course 1",
 			"code": "TESTCOURSE1",
 			"exams": []
+			"created": "date",
+			"updated": "date",
 		},
 		{
+			"id": "id",
 			"name": "Course 2",
 			"code": "TESTCOURSE2",
 			"exams": []
+			"created": "date",
+			"updated": "date",
 		}
 	]
 	```

@@ -30,13 +30,14 @@ public class LatexCompilerController {
     ResponseEntity<?> respEntity = null;
 
     String filename = "compile.tex";
-    latexCompiler.compile(latexString, filename);
+    latexCompiler.compile(latexString.replaceAll("\\\\n", "\n"), filename);
 
     File result = new File(latexCompiler.BASE_PATH + filename);
 
     if (result.exists()) {
       try {
-        InputStream inputStream = new FileInputStream(latexCompiler.BASE_PATH + filename);
+        InputStream inputStream =
+            new FileInputStream(latexCompiler.BASE_PATH + filename.replace(".tex", ".pdf"));
         String type = result.toURI().toURL().openConnection().guessContentTypeFromName(filename);
 
         byte[] out = LatexCompiler.toByteArray(inputStream);

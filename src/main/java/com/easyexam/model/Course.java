@@ -1,7 +1,8 @@
 package com.easyexam.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.easyexam.model.utils.TimestampedEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +19,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "courses")
+@JsonIgnoreProperties(allowGetters = true)
 public class Course extends TimestampedEntity {
 
   @Id
@@ -32,8 +34,7 @@ public class Course extends TimestampedEntity {
   @Size(min = 5, max = 20)
   private String code;
 
-  @JsonIgnore
-  @ManyToOne private User user;
+  @JsonIgnore @ManyToOne private User user;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -51,6 +52,10 @@ public class Course extends TimestampedEntity {
 
   public Long getId() {
     return this.id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {

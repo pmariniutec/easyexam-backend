@@ -21,7 +21,6 @@ public class Question extends TimestampedEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank
   @Size(min = 1, max = 200)
   private String title;
 

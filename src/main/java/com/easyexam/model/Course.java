@@ -31,7 +31,7 @@ public class Course extends TimestampedEntity {
   @Size(min = 5, max = 20)
   private String code;
 
-  @ManyToOne @NotBlank private User user;
+  @ManyToOne private User user;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(

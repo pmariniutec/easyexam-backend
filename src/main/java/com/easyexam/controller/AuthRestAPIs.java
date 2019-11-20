@@ -8,7 +8,9 @@ import com.easyexam.model.RoleName;
 import com.easyexam.model.User;
 import com.easyexam.repository.RoleRepository;
 import com.easyexam.repository.UserRepository;
+import com.easyexam.security.jwt.JwtToken;
 import com.easyexam.security.jwt.JwtUtils;
+import com.easyexam.security.service.UserDetailsServiceImpl;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.Valid;
@@ -17,8 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,18 +42,22 @@ public class AuthRestAPIs {
 
   @Autowired JwtUtils jwtUtils;
 
+  @Autowired private JwtToken jwtToken;
+
+  @Autowired private UserDetailsServiceImpl userDetailsService;
+
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassword()));
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            loginRequest.getEmail(), loginRequest.getPassword()));
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+    final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
 
-    String jwtToken = jwtUtils.generateJwtToken(authentication);
-    return ResponseEntity.ok(new JwtResponse(jwtToken));
+    final String token = jwtToken.generateToken(userDetails);
+
+    return ResponseEntity.ok(new JwtResponse(token));
   }
 
   @PostMapping("/register")
@@ -71,7 +76,7 @@ public class AuthRestAPIs {
             encoder.encode(registerRequest.getPassword()));
 
     Set<String> strRoles = registerRequest.getRole();
-    Set<Role> roles = new HashSet<>();
+    Set<Role> roles = new HashSet<Role>();
 
     strRoles.forEach(
         role -> {

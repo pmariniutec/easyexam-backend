@@ -1,5 +1,6 @@
 package com.easyexam.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.easyexam.model.utils.TimestampedEntity;
 import java.util.List;
 import javax.persistence.Entity;
@@ -31,6 +32,7 @@ public class Course extends TimestampedEntity {
   @Size(min = 5, max = 20)
   private String code;
 
+  @JsonIgnore
   @ManyToOne private User user;
 
   @ManyToMany(fetch = FetchType.LAZY)

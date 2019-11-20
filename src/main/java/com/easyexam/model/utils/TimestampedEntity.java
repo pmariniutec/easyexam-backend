@@ -29,7 +29,7 @@ public abstract class TimestampedEntity {
     updated = new Date();
   }
 
-  public Date getCreate() {
+  public Date getCreated() {
     return this.created;
   }
 

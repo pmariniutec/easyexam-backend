@@ -28,4 +28,12 @@ public abstract class TimestampedEntity {
   protected void onUpdate() {
     updated = new Date();
   }
+
+  public Date getCreate() {
+    return this.created;
+  }
+
+  public Date getUpdated() {
+    return this.updated;
+  }
 }

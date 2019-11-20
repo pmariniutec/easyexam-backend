@@ -1,9 +1,9 @@
-Questions API Docs
+Solutions API Docs
 ----------------
 
-- Create Question
+- Create Solution
     ```
-    POST /api/question/create
+    POST /api/solution/create
     ```
     Expects:
     ```
@@ -18,9 +18,9 @@ Questions API Docs
 	Success response
 	```
 
-- Get Question
+- Get Solution
     ```
-    GET /api/question/{questionId}
+    GET /api/solution/{solutionId}
     ```
 
 	Returns:

@@ -30,7 +30,7 @@ public class Question extends TimestampedEntity {
   private String content;
 
   @ManyToMany(mappedBy = "questions")
-  private List<Exam> exams = new ArrayList<>();
+  private List<Exam> exams = new ArrayList<Exam>();
 
   public Question() {}
 

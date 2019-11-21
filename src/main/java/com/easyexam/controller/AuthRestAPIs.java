@@ -40,8 +40,6 @@ public class AuthRestAPIs {
 
   @Autowired PasswordEncoder encoder;
 
-  @Autowired JwtUtils jwtUtils;
-
   @Autowired private JwtToken jwtToken;
 
   @Autowired private UserDetailsServiceImpl userDetailsService;

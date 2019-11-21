@@ -15,8 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "exams")
@@ -46,7 +46,6 @@ public class Exam extends TimestampedEntity {
       inverseJoinColumns = @JoinColumn(name = "solution_id"))
   private List<Solution> solutions = new ArrayList<Solution>();
 
-  @NotBlank
   @ElementCollection
   @CollectionTable(name = "keywords")
   private List<String> keywords = new ArrayList<String>();
@@ -57,6 +56,14 @@ public class Exam extends TimestampedEntity {
     this.title = title;
     this.questions = questions;
     this.keywords = keywords;
+  }
+
+  public Long getId() {
+    return this.id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getTitle() {

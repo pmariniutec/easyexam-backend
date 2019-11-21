@@ -30,7 +30,7 @@ public class Exam extends TimestampedEntity {
   @Size(min = 1, max = 200)
   private String title;
 
-  @ManyToOne @NotBlank private User user;
+  @ManyToOne private User user;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(

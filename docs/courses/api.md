@@ -63,6 +63,23 @@ Courses API Docs
 	]
 	```
 
+- Get Course By Id
+    ```
+    GET /api/course/:id
+    ```
+
+	Returns:
+	```
+    {
+        "id": "id",
+        "name": "Course 1",
+        "code": "TESTCOURSE1",
+        "exams": []
+        "created": "date",
+        "updated": "date",
+    }
+	```
+
 - Delete Course
     ```
     DELETE /api/course/<id>

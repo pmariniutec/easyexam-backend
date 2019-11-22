@@ -6,6 +6,8 @@ import com.easyexam.repository.QuestionRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +27,17 @@ public class QuestionController {
   @Autowired QuestionRepository questionRepository;
   @Autowired AuthenticationUtils authenticationUtils;
 
-  @Autowired JwtUtils jwtUtils;
+	@Autowired
+	JwtUtils jwtUtils;
+		
+  @GetMapping("")
+  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getQuestions() {
+    String email = authenticationUtils.getAuthenticatedUserEmail();
+
+		Optional<List<Question>> questions = questionRepository.getQuestions();
+		return ResponseEntity.ok(questions.get());
+  }
 
   @GetMapping("/{questionId}")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")

@@ -1,5 +1,4 @@
 package com.easyexam.repository;
-
 import com.easyexam.model.Exam;
 import java.util.List;
 import java.util.Optional;

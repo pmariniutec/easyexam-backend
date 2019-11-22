@@ -15,7 +15,9 @@ public class UserPrinciple implements UserDetails {
 
   private Long id;
 
-  private String name;
+  private String firstName;
+
+  private String lastName;
 
   private String email;
 
@@ -25,12 +27,14 @@ public class UserPrinciple implements UserDetails {
 
   public UserPrinciple(
       Long id,
-      String name,
+      String firstName,
+      String lastName,
       String email,
       String password,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
-    this.name = name;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.email = email;
     this.password = password;
     this.authorities = authorities;
@@ -42,16 +46,19 @@ public class UserPrinciple implements UserDetails {
             .map(role -> new SimpleGrantedAuthority(role.getName().name()))
             .collect(Collectors.toList());
 
-    return new UserPrinciple(
-        user.getId(), user.getFullName(), user.getEmail(), user.getPassword(), authorities);
+    return new UserPrinciple(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), authorities);
   }
 
   public Long getId() {
     return id;
   }
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
   }
 
   public String getEmail() {

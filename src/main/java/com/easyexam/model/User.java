@@ -78,7 +78,7 @@ public class User extends TimestampedEntity {
   }
 
   public String getLastName() {
-    return firstName;
+    return lastName;
   }
 
   public void setLastName(String lastName) {

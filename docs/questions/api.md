@@ -18,7 +18,22 @@ Questions API Docs
 	Success response
 	```
 
-- Get Question
+- Get Questions
+    ```
+    GET /api/question
+    ```
+
+	Returns:
+	```
+	[{
+		"title": "TITLE",
+		"content": "CONTENT",
+		"created": "date",
+		"updated": "date"
+	},...]
+	```
+
+- Get Question by Id
     ```
     GET /api/question/{questionId}
     ```

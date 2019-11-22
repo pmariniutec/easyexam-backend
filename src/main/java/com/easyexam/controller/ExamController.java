@@ -35,7 +35,8 @@ public class ExamController {
     String email = authenticationUtils.getAuthenticatedUserEmail();
 
     Optional<List<Exam>> exams = examRepository.findUserExams(email);
-    return ResponseEntity.ok(exams.get());
+
+    return ResponseEntity.ok(exams.orElse(List.of()));
   }
 
   @PostMapping("/create")

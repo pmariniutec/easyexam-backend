@@ -35,8 +35,8 @@ public class QuestionController {
 	public ResponseEntity<?> getQuestions() {
     String email = authenticationUtils.getAuthenticatedUserEmail();
 
-		Optional<List<Question>> questions = questionRepository.getQuestions();
-		return ResponseEntity.ok(questions.get());
+    Optional<List<Question>> questions = questionRepository.getQuestions();
+    return ResponseEntity.ok(questions.orElse(List.of()));
   }
 
   @GetMapping("/{questionId}")
@@ -44,8 +44,8 @@ public class QuestionController {
   public ResponseEntity<?> getCourseExams(@PathVariable String questionId) {
     Long id = Long.valueOf(questionId);
 
-    Question question = questionRepository.findById(id).get();
-    return ResponseEntity.ok(question);
+    Optional<Question> question = questionRepository.findById(id);
+    return ResponseEntity.ok(question.orElse(null));
   }
 
   @PostMapping("/create")

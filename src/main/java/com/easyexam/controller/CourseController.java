@@ -40,9 +40,9 @@ public class CourseController {
   public ResponseEntity<?> getUserCourses() {
     String email = authenticationUtils.getAuthenticatedUserEmail();
 
-    List<Course> data = courseRepository.findUserCourses(email).get();
+    Optional<List<Course>> data = courseRepository.findUserCourses(email);
 
-    return ResponseEntity.ok(data);
+    return ResponseEntity.ok(data.orElse(List.of()));
   }
 
   @GetMapping("/{courseId}")
@@ -50,8 +50,8 @@ public class CourseController {
   public ResponseEntity<?> getCourseExams(@PathVariable String courseId) {
     Long id = Long.valueOf(courseId);
 
-    Course course = courseRepository.findById(id).get();
-    return ResponseEntity.ok(course);
+    Optional<Course> course = courseRepository.findById(id);
+    return ResponseEntity.ok(course.orElse(null));
   }
 
   @PostMapping("/create")

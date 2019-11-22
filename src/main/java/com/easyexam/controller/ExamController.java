@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,6 +38,15 @@ public class ExamController {
     Optional<List<Exam>> exams = examRepository.findUserExams(email);
 
     return ResponseEntity.ok(exams.orElse(List.of()));
+  }
+    
+  @GetMapping("/{examId}")
+  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+    public ResponseEntity<?> getExamById(@PathVariable String examId) {
+    Long id = Long.valueOf(examId);
+
+    Optional<Exam> exam = examRepository.findById(id);
+    return ResponseEntity.ok(exam.orElse(null));
   }
 
   @PostMapping("/create")

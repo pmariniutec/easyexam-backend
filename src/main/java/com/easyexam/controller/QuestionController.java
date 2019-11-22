@@ -41,7 +41,7 @@ public class QuestionController {
 
   @GetMapping("/{questionId}")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> getCourseExams(@PathVariable String questionId) {
+    public ResponseEntity<?> getQuestionById(@PathVariable String questionId) {
     Long id = Long.valueOf(questionId);
 
     Optional<Question> question = questionRepository.findById(id);

@@ -29,7 +29,7 @@ public class SolutionController {
 
   @GetMapping("/{solutionId}")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> getCourseExams(@PathVariable String solutionId) {
+    public ResponseEntity<?> getSolutionById(@PathVariable String solutionId) {
     Long id = Long.valueOf(solutionId);
 
     Solution solution = solutionRepository.findById(id).get();

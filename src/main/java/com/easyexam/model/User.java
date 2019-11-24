@@ -28,6 +28,9 @@ public class User extends TimestampedEntity {
   private Long id;
 
   @NotBlank
+  private int points;
+
+  @NotBlank
   @Size(min = 3, max = 50)
   private String firstName;
 
@@ -59,6 +62,7 @@ public class User extends TimestampedEntity {
     this.lastName = lastName;
     this.email = email;
     this.password = password;
+    this.points = 0;
   }
 
   public Long getId() {
@@ -111,5 +115,11 @@ public class User extends TimestampedEntity {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+  public void setPoints(int points){
+      this.points = points;
+  }
+  public int getPoints(){
+      return this.points
   }
 }

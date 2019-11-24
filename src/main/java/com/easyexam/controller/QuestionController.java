@@ -52,6 +52,7 @@ public class QuestionController {
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
   public ResponseEntity<?> createQuestion(
       @Valid @RequestBody CreateQuestionForm createQuestionRequest) {
+
     Question question =
         new Question(createQuestionRequest.getTitle(), createQuestionRequest.getContent());
 

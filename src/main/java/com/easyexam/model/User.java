@@ -50,8 +50,8 @@ public class User extends TimestampedEntity {
 	private String email;
 
 	@NotBlank
-    @JsonIgnore
-    @Size(min = 6, max = 100)
+	@JsonIgnore
+	@Size(min = 6, max = 100)
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)

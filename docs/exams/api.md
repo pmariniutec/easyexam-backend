@@ -47,3 +47,24 @@ Exams API Docs
 		},
 	]
 	```
+
+- Update Exam
+    ```
+    PATCH /api/exam/{examId}
+    ```
+    Expects:
+    ```
+    {
+        "title": "TITLE", // Optional
+        "questions": [{ "content": "CONTENT" }, { "content": "CONTENT" }, ...], //optional
+        "keywords": ["key1", "key2", ...], //Optional
+        "courseId" : "ID" // NOT REQUIRED //Optional
+    }
+    ```
+
+	Returns:
+	```
+    {
+        "message": "Successfully updated the exam."
+    }
+	```

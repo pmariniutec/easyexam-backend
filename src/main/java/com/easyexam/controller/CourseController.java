@@ -93,5 +93,4 @@ public class CourseController {
 
 		return ResponseEntity.ok().body("Deleted course with id " + courseId);
 	}
-
 }

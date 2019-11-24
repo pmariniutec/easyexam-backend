@@ -31,7 +31,6 @@ import java.lang.reflect.Field;
 @RestController
 @RequestMapping("/api/exam")
 public class ExamController {
-
 	@Autowired
 	CourseRepository courseRepository;
 
@@ -110,5 +109,4 @@ public class ExamController {
 
 		return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
 	}
-
 }

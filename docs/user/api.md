@@ -3,7 +3,7 @@ User API Docs
 
 - Get User Data
     ```
-    POST /api/user/
+    GET /api/user/
     ```
     Expects:
     ```
@@ -25,7 +25,8 @@ User API Docs
         "lastName": <NEW VALUE>, //optional
         "email": <NEW VALUE>, //optional
         "password": <NEW VALUE>, //optional
-        "role": [<NEW VALUE>] //optional
+        "role": [<NEW VALUE>], //optional
+        "points": [<NEW VALUE>] //optional
     }
     ```
     

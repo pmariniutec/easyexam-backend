@@ -1,8 +1,10 @@
 package com.easyexam.controller;
 
 import com.easyexam.message.request.CreateExamForm;
+import com.easyexam.model.Course;
 import com.easyexam.model.Exam;
 import com.easyexam.model.User;
+import com.easyexam.repository.CourseRepository;
 import com.easyexam.repository.ExamRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
@@ -29,6 +31,7 @@ import java.lang.reflect.Field;
 @RequestMapping("/api/exam")
 public class ExamController {
 
+  @Autowired CourseRepository courseRepository;
   @Autowired ExamRepository examRepository;
   @Autowired AuthenticationUtils authenticationUtils;
 
@@ -65,10 +68,16 @@ public class ExamController {
 
         User user = authenticationUtils.getUserObject();
         exam.setUser(user);
-
+  
         // TODO: Search each question solution (if present) and add it
 
-        examRepository.save(exam);
+        Exam savedExam = examRepository.saveAndFlush(exam);
+
+        if (createExamRequest.getCourseId() != null) {
+            Course course = courseRepository.getOne(createExamRequest.getCourseId());
+            course.setExam(savedExam);
+            courseRepository.save(course);
+        }
 
         Field field = ReflectionUtils.findField(Exam.class, "id");
         ReflectionUtils.makeAccessible(field);

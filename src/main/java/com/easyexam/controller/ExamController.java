@@ -9,6 +9,7 @@ import com.easyexam.repository.ExamRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.util.ReflectionUtils;
+import java.lang.reflect.Field;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -52,6 +56,27 @@ public class ExamController {
     return ResponseEntity.ok(exam.orElse(null));
   }
 
+  @PatchMapping("/{examId}")
+  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+  public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields){
+        Long id = (Long)fields.get("id");
+        Optional<Exam> exam = examRepository.findById(id);
+
+        if(!exam.isPresent()){
+            return ResponseEntity.badRequest().body("Cannot find exam by that id");
+        }
+
+        fields.forEach((k, v) -> {
+            
+            Field field = ReflectionUtils.findField(Exam.class, k);
+            ReflectionUtils.makeAccessible(field);
+            ReflectionUtils.setField(field, exam.get(), v);
+        });
+        examRepository.saveAndFlush(exam.get());
+
+        return ResponseEntity.ok().body("Successfully updated the exam.");
+
+  }
   @PostMapping("/create")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
   public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {

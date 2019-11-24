@@ -10,7 +10,6 @@ import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Optional;
 import javax.validation.Valid;
 import com.easyexam.message.response.SuccessfulCreation;
@@ -32,80 +31,82 @@ import java.lang.reflect.Field;
 @RestController
 @RequestMapping("/api/exam")
 public class ExamController {
+	@Autowired
+	CourseRepository courseRepository;
 
-  @Autowired CourseRepository courseRepository;
-  @Autowired ExamRepository examRepository;
-  @Autowired AuthenticationUtils authenticationUtils;
+	@Autowired
+	ExamRepository examRepository;
 
-  @Autowired JwtUtils jwtUtils;
+	@Autowired
+	AuthenticationUtils authenticationUtils;
 
-  @GetMapping("")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> getUserExams() {
-    String email = authenticationUtils.getAuthenticatedUserEmail();
+	@Autowired
+	JwtUtils jwtUtils;
 
-    Optional<List<Exam>> exams = examRepository.findUserExams(email);
+	@GetMapping("")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getUserExams() {
+		String email = authenticationUtils.getAuthenticatedUserEmail();
 
-    return ResponseEntity.ok(exams.orElse(List.of()));
-  }
-    
-  @GetMapping("/{examId}")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> getExamById(@PathVariable String examId) {
-    Long id = Long.valueOf(examId);
+		Optional<List<Exam>> exams = examRepository.findUserExams(email);
 
-    Optional<Exam> exam = examRepository.findById(id);
-    return ResponseEntity.ok(exam.orElse(null));
-  }
+		return ResponseEntity.ok(exams.orElse(List.of()));
+	}
 
-  @PatchMapping("/{examId}")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> partialUpdate(@PathVariable String examId, @RequestBody Map<String, Object> fields){
-        Long id = Long.valueOf(examId);
-        Optional<Exam> exam = examRepository.findById(id);
+	@GetMapping("/{examId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getExamById(@PathVariable String examId) {
+		Long id = Long.valueOf(examId);
 
-        if(!exam.isPresent()){
-            return ResponseEntity.badRequest().body("Cannot find exam by that id");
-        }
+		Optional<Exam> exam = examRepository.findById(id);
+		return ResponseEntity.ok(exam.orElse(null));
+	}
 
-        fields.forEach((k, v) -> {
-            
-            Field field = ReflectionUtils.findField(Exam.class, k);
-            ReflectionUtils.makeAccessible(field);
-            ReflectionUtils.setField(field, exam.get(), v);
-        });
-        examRepository.saveAndFlush(exam.get());
+	@PatchMapping("/{examId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields) {
+		Long id = (Long) fields.get("id");
+		Optional<Exam> exam = examRepository.findById(id);
 
-        return ResponseEntity.ok().body("Successfully updated the exam.");
+		if (!exam.isPresent()) {
+			return ResponseEntity.badRequest().body("Cannot find exam by that id");
+		}
 
-  }
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
+		fields.forEach((k, v) -> {
+			Field field = ReflectionUtils.findField(Exam.class, k);
+			ReflectionUtils.makeAccessible(field);
+			ReflectionUtils.setField(field, exam.get(), v);
+		});
+		examRepository.saveAndFlush(exam.get());
 
-        Exam exam =
-            new Exam(
-                createExamRequest.getTitle(),
-                createExamRequest.getQuestions(),
-                createExamRequest.getKeywords());
+		return ResponseEntity.ok().body("Successfully updated the exam.");
 
-        User user = authenticationUtils.getUserObject();
-        exam.setUser(user);
-  
-        // TODO: Search each question solution (if present) and add it
+	}
 
-        Exam savedExam = examRepository.saveAndFlush(exam);
+	@PostMapping("/create")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
 
-        if (createExamRequest.getCourseId() != null) {
-            Course course = courseRepository.getOne(createExamRequest.getCourseId());
-            course.setExam(savedExam);
-            courseRepository.save(course);
-        }
+		Exam exam = new Exam(createExamRequest.getTitle(), createExamRequest.getQuestions(),
+				createExamRequest.getKeywords());
 
-        Field field = ReflectionUtils.findField(Exam.class, "id");
-        ReflectionUtils.makeAccessible(field);
-        Long examId = (Long) ReflectionUtils.getField(field, exam);
+		User user = authenticationUtils.getUserObject();
+		exam.setUser(user);
 
-        return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
-  }
+		// TODO: Search each question solution (if present) and add it
+
+		Exam savedExam = examRepository.saveAndFlush(exam);
+
+		if (createExamRequest.getCourseId() != null) {
+			Course course = courseRepository.getOne(createExamRequest.getCourseId());
+			course.setExam(savedExam);
+			courseRepository.save(course);
+		}
+
+		Field field = ReflectionUtils.findField(Exam.class, "id");
+		ReflectionUtils.makeAccessible(field);
+		Long examId = (Long) ReflectionUtils.getField(field, exam);
+
+		return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
+	}
 }

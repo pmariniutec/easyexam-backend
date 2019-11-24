@@ -4,62 +4,64 @@ import java.util.Set;
 import javax.validation.constraints.*;
 
 public class RegisterForm {
-  @NotBlank
-  @Size(min = 3, max = 50)
-  private String firstName;
 
-  @NotBlank
-  @Size(min = 3, max = 50)
-  private String lastName;
+	@NotBlank
+	@Size(min = 3, max = 50)
+	private String firstName;
 
-  @NotBlank
-  @Size(max = 60)
-  @Email
-  private String email;
+	@NotBlank
+	@Size(min = 3, max = 50)
+	private String lastName;
 
-  private Set<String> role;
+	@NotBlank
+	@Size(max = 60)
+	@Email
+	private String email;
 
-  @NotBlank
-  @Size(min = 6, max = 40)
-  private String password;
+	private Set<String> role;
 
-  public String getFirstName() {
-    return firstName;
-  }
+	@NotBlank
+	@Size(min = 6, max = 40)
+	private String password;
 
-  public void setName(String firstName) {
-    this.firstName = firstName;
-  }
+	public String getFirstName() {
+		return firstName;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public void setName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public String getPassword() {
-    return password;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+	public String getPassword() {
+		return password;
+	}
 
-  public Set<String> getRole() {
-    return this.role;
-  }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-  public void setRole(Set<String> role) {
-    this.role = role;
-  }
+	public Set<String> getRole() {
+		return this.role;
+	}
+
+	public void setRole(Set<String> role) {
+		this.role = role;
+	}
+
 }

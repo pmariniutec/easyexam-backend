@@ -4,23 +4,24 @@ import javax.validation.constraints.*;
 
 public class AddExamToCourseForm {
 
-  private Long examId;
+	private Long examId;
 
-  private Long courseId;
+	private Long courseId;
 
-  public Long getExamId() {
-    return this.examId;
-  }
+	public Long getExamId() {
+		return this.examId;
+	}
 
-  public void setExamId(Long examId) {
-    this.examId = examId;
-  }
+	public void setExamId(Long examId) {
+		this.examId = examId;
+	}
 
-  public Long getCourseId() {
-    return this.courseId;
-  }
+	public Long getCourseId() {
+		return this.courseId;
+	}
 
-  public void setCourseId(Long courseId) {
-    this.courseId = courseId;
-  }
+	public void setCourseId(Long courseId) {
+		this.courseId = courseId;
+	}
+
 }

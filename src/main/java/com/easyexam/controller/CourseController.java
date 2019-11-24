@@ -29,67 +29,68 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/course")
 public class CourseController {
 
-  @Autowired CourseRepository courseRepository;
-  @Autowired ExamRepository examRepository;
-  @Autowired AuthenticationUtils authenticationUtils;
+	@Autowired
+	CourseRepository courseRepository;
 
-  @Autowired JwtUtils jwtUtils;
+	@Autowired
+	ExamRepository examRepository;
 
-  @GetMapping("")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> getUserCourses() {
-    String email = authenticationUtils.getAuthenticatedUserEmail();
+	@Autowired
+	AuthenticationUtils authenticationUtils;
 
-    Optional<List<Course>> data = courseRepository.findUserCourses(email);
+	@Autowired
+	JwtUtils jwtUtils;
 
-    return ResponseEntity.ok(data.orElse(List.of()));
-  }
+	@GetMapping("")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getUserCourses() {
+		String email = authenticationUtils.getAuthenticatedUserEmail();
 
-  @GetMapping("/{courseId}")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> getCourseExams(@PathVariable String courseId) {
-    Long id = Long.valueOf(courseId);
+		Optional<List<Course>> data = courseRepository.findUserCourses(email);
 
-    Optional<Course> course = courseRepository.findById(id);
-    return ResponseEntity.ok(course.orElse(null));
-  }
+		return ResponseEntity.ok(data.orElse(List.of()));
+	}
 
-  @PostMapping("/create")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> createUserCourse(
-      @Valid @RequestBody CreateCourseForm createCourseRequest) {
-    Course course = new Course(createCourseRequest.getName(), createCourseRequest.getCode());
+	@GetMapping("/{courseId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getCourseExams(@PathVariable String courseId) {
+		Long id = Long.valueOf(courseId);
 
-    // get authenticated user
-    User user = authenticationUtils.getUserObject();
-    course.setUser(user);
+		Optional<Course> course = courseRepository.findById(id);
+		return ResponseEntity.ok(course.orElse(null));
+	}
 
-    courseRepository.save(course);
-    return ResponseEntity.ok().body("Successfully created course");
-  }
+	@PostMapping("/create")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> createUserCourse(@Valid @RequestBody CreateCourseForm createCourseRequest) {
+		Course course = new Course(createCourseRequest.getName(), createCourseRequest.getCode());
 
-  @PostMapping("/exam/add")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> addExamToCourse(@Valid @RequestBody AddExamToCourseForm addExamRequest) {
-    Optional<Course> course = courseRepository.findById(addExamRequest.getCourseId());
-    if(!course.isPresent()){
-        return ResponseEntity.badRequest().body("Course does not exist");
-    }
+		// get authenticated user
+		User user = authenticationUtils.getUserObject();
+		course.setUser(user);
 
-    Optional<Exam> exam = examRepository.findById(addExamRequest.getExamId());
-    //TODO If cannot find exam then create a new empty one
-    course.get().setExam(exam.get());
+		courseRepository.save(course);
+		return ResponseEntity.ok().body("Successfully created course");
+	}
 
-    courseRepository.save(course.get());
-    return ResponseEntity.ok().body("Successfully added exam to course");
-  }
+	@PostMapping("/exam/add")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> addExamToCourse(@Valid @RequestBody AddExamToCourseForm addExamRequest) {
+		// TODO: Handle exceptions
+		Course course = courseRepository.getOne(addExamRequest.getCourseId());
+		Optional<Exam> exam = examRepository.findById(addExamRequest.getExamId());
+		course.setExam(exam.get());
 
-  @DeleteMapping("{courseId}")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> deleteCourse(@PathVariable String courseId) {
-    Long id = Long.valueOf(courseId);
-    courseRepository.deleteById(id);
+		courseRepository.save(course);
+		return ResponseEntity.ok().body("Successfully added exam to course");
+	}
 
-    return ResponseEntity.ok().body("Deleted course with id " + courseId);
-  }
+	@DeleteMapping("{courseId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> addExamToCourse(@PathVariable String courseId) {
+		Long id = Long.valueOf(courseId);
+		courseRepository.deleteById(id);
+
+		return ResponseEntity.ok().body("Deleted course with id " + courseId);
+	}
 }

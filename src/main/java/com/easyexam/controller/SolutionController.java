@@ -22,28 +22,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/solution")
 public class SolutionController {
 
-  @Autowired SolutionRepository solutionRepository;
-  @Autowired AuthenticationUtils authenticationUtils;
+	@Autowired
+	SolutionRepository solutionRepository;
 
-  @Autowired JwtUtils jwtUtils;
+	@Autowired
+	AuthenticationUtils authenticationUtils;
 
-  @GetMapping("/{solutionId}")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> getSolutionById(@PathVariable String solutionId) {
-    Long id = Long.valueOf(solutionId);
+	@Autowired
+	JwtUtils jwtUtils;
 
-    Solution solution = solutionRepository.findById(id).get();
-    return ResponseEntity.ok(solution);
-  }
+	@GetMapping("/{solutionId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getSolutionById(@PathVariable String solutionId) {
+		Long id = Long.valueOf(solutionId);
 
-  @PostMapping("/create")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> createSolution(
-      @Valid @RequestBody CreateSolutionForm createSolutionRequest) {
-    Solution solution =
-        new Solution(createSolutionRequest.getTitle(), createSolutionRequest.getContent());
+		Solution solution = solutionRepository.findById(id).get();
+		return ResponseEntity.ok(solution);
+	}
 
-    solutionRepository.save(solution);
-    return ResponseEntity.ok().body("Successfully created solution");
-  }
+	@PostMapping("/create")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> createSolution(@Valid @RequestBody CreateSolutionForm createSolutionRequest) {
+		Solution solution = new Solution(createSolutionRequest.getTitle(), createSolutionRequest.getContent());
+
+		solutionRepository.save(solution);
+		return ResponseEntity.ok().body("Successfully created solution");
+	}
+
 }

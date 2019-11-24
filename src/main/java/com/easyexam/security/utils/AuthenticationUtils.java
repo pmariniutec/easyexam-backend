@@ -10,22 +10,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationUtils {
 
-  @Autowired UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	UserDetailsServiceImpl userDetailsService;
 
-  public String getAuthenticatedUserEmail() {
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (principal instanceof UserDetails) {
-      return ((UserDetails) principal).getUsername();
-    } else {
-      return principal.toString();
-    }
-  }
+	public String getAuthenticatedUserEmail() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			return ((UserDetails) principal).getUsername();
+		}
+		else {
+			return principal.toString();
+		}
+	}
 
-  public User getUserObject() {
-    String email = this.getAuthenticatedUserEmail();
+	public User getUserObject() {
+		String email = this.getAuthenticatedUserEmail();
 
-    User user = userDetailsService.getUserFromEmail(email);
+		User user = userDetailsService.getUserFromEmail(email);
 
-    return user;
-  }
+		return user;
+	}
+
 }

@@ -48,3 +48,5 @@ nbdist/
 .mvn/
 *.pem
 ssh-ec2
+
+.vim

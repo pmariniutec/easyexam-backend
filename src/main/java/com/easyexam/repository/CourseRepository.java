@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-  @Query("select c from Course c where c.user.email = ?1")
-  Optional<List<Course>> findUserCourses(String email);
+	@Query("select c from Course c where c.user.email = ?1")
+	Optional<List<Course>> findUserCourses(String email);
+
 }

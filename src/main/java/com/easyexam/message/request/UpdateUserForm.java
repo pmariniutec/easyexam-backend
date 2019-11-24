@@ -4,67 +4,70 @@ import java.util.Set;
 import javax.validation.constraints.*;
 
 public class UpdateUserForm {
-  @Size(min = 3, max = 50)
-  private String firstName;
 
-  @Size(min = 3, max = 50)
-  private String lastName;
+	@Size(min = 3, max = 50)
+	private String firstName;
 
-  @Size(max = 60)
-  @Email
-  private String email;
+	@Size(min = 3, max = 50)
+	private String lastName;
 
-  private Set<String> role;
+	@Size(max = 60)
+	@Email
+	private String email;
 
-  @Size(min = 6, max = 40)
-  private String password;
+	private Set<String> role;
 
-  private int points;
+	@Size(min = 6, max = 40)
+	private String password;
 
-  public void setPoints(int points){
-      this.points = points;
-  }
-  public int getPoints(){
-      return this.points;
-  }
+	private int points;
 
-  public String getFirstName() {
-    return firstName;
-  }
+	public void setPoints(int points) {
+		this.points = points;
+	}
 
-  public void setName(String firstName) {
-    this.firstName = firstName;
-  }
+	public int getPoints() {
+		return this.points;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public String getFirstName() {
+		return firstName;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public void setName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public String getPassword() {
-    return password;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public Set<String> getRole() {
-    return this.role;
-  }
+	public String getPassword() {
+		return password;
+	}
 
-  public void setRole(Set<String> role) {
-    this.role = role;
-  }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<String> getRole() {
+		return this.role;
+	}
+
+	public void setRole(Set<String> role) {
+		this.role = role;
+	}
+
 }

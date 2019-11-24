@@ -22,75 +22,77 @@ import javax.validation.constraints.Size;
 @JsonIgnoreProperties(allowGetters = true)
 public class Course extends TimestampedEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 60)
-  private String name;
+	@NotBlank
+	@Size(min = 1, max = 60)
+	private String name;
 
-  @NotBlank
-  @Size(min = 5, max = 20)
-  private String code;
+	@NotBlank
+	@Size(min = 5, max = 20)
+	private String code;
 
-  @JsonIgnore @ManyToOne private User user;
+	@JsonIgnore
+	@ManyToOne
+	private User user;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "course_exams",
-      joinColumns = @JoinColumn(name = "course_id"),
-      inverseJoinColumns = @JoinColumn(name = "exam_id"))
-  private List<Exam> exams;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "course_exams", joinColumns = @JoinColumn(name = "course_id"),
+			inverseJoinColumns = @JoinColumn(name = "exam_id"))
+	private List<Exam> exams;
 
-  public Course() {}
+	public Course() {
+	}
 
-  public Course(String name, String code) {
-    this.name = name;
-    this.code = code;
-  }
+	public Course(String name, String code) {
+		this.name = name;
+		this.code = code;
+	}
 
-  public Long getId() {
-    return this.id;
-  }
+	public Long getId() {
+		return this.id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public String getName() {
-    return this.name;
-  }
+	public String getName() {
+		return this.name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public String getCode() {
-    return this.code;
-  }
+	public String getCode() {
+		return this.code;
+	}
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-  public List<Exam> getExams() {
-    return this.exams;
-  }
+	public List<Exam> getExams() {
+		return this.exams;
+	}
 
-  public void setExams(List<Exam> exams) {
-    this.exams = exams;
-  }
+	public void setExams(List<Exam> exams) {
+		this.exams = exams;
+	}
 
-  public void setExam(Exam exam) {
-    this.exams.add(exam);
-  }
+	public void setExam(Exam exam) {
+		this.exams.add(exam);
+	}
 
-  public User getUser() {
-    return this.user;
-  }
+	public User getUser() {
+		return this.user;
+	}
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

@@ -23,34 +23,40 @@ import java.lang.reflect.Field;
 @RequestMapping("/api/user/")
 public class UserController {
 
-  @Autowired AuthenticationUtils authenticationUtils;
-  @Autowired UserRepository userRepository;
-  @Autowired PasswordEncoder encoder;
+	@Autowired
+	AuthenticationUtils authenticationUtils;
 
-  @GetMapping("")
-    public ResponseEntity<?> userInfo() {
+	@Autowired
+	UserRepository userRepository;
 
-        User user = authenticationUtils.getUserObject();
+	@Autowired
+	PasswordEncoder encoder;
 
-        return ResponseEntity.ok(user);
-    }
+	@GetMapping("")
+	public ResponseEntity<?> userInfo() {
 
-    @PatchMapping("")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields) {
-        User user = authenticationUtils.getUserObject();
+		User user = authenticationUtils.getUserObject();
 
-        fields.forEach((k, v) -> {
-            
-            if (k.equals("password")) {
-                v = encoder.encode(v.toString());
-            }
-            Field field = ReflectionUtils.findField(User.class, k);
-            ReflectionUtils.makeAccessible(field);
-            ReflectionUtils.setField(field, user, v);
-        });
-        userRepository.save(user);
+		return ResponseEntity.ok(user);
+	}
 
-        return ResponseEntity.ok().body("Successfully updated the user.");
-    }
+	@PatchMapping("")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields) {
+		User user = authenticationUtils.getUserObject();
+
+		fields.forEach((k, v) -> {
+
+			if (k.equals("password")) {
+				v = encoder.encode(v.toString());
+			}
+			Field field = ReflectionUtils.findField(User.class, k);
+			ReflectionUtils.makeAccessible(field);
+			ReflectionUtils.setField(field, user, v);
+		});
+		userRepository.save(user);
+
+		return ResponseEntity.ok().body("Successfully updated the user.");
+	}
+
 }

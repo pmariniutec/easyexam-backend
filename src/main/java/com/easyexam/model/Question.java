@@ -1,8 +1,8 @@
 package com.easyexam.model;
 
 import com.easyexam.model.utils.TimestampedEntity;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,6 +53,10 @@ public class Question extends TimestampedEntity {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public void removeExam(Exam exam) {
+		this.exams.remove(exam);
 	}
 
 }

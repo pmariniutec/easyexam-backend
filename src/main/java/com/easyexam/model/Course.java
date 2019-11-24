@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -74,16 +75,21 @@ public class Course extends TimestampedEntity {
 		this.code = code;
 	}
 
-	public List<Exam> getExams() {
+	public Set<Exam> _getExams() {
 		return this.exams;
 	}
 
-	public void setExams(List<Exam> exams) {
+	public void setExams(Set<Exam> exams) {
 		this.exams = exams;
 	}
 
-	public void setExam(Exam exam) {
+	public void addExam(Exam exam) {
 		this.exams.add(exam);
+		exam.setCourse(this);
+	}
+
+	public void removeExam(Exam exam) {
+		this.exams.remove(exam);
 	}
 
 	public User getUser() {

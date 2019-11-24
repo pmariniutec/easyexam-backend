@@ -60,8 +60,8 @@ public class ExamController {
 
   @PatchMapping("/{examId}")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields){
-        Long id = (Long)fields.get("id");
+  public ResponseEntity<?> partialUpdate(@PathVariable String examId, @RequestBody Map<String, Object> fields){
+        Long id = Long.valueOf(examId);
         Optional<Exam> exam = examRepository.findById(id);
 
         if(!exam.isPresent()){

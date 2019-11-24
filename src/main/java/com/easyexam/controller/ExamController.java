@@ -56,12 +56,6 @@ public class ExamController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
     public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
-        // examRepository.save(exam);
-        // HashMap<String, String> res = new HashMap<>();
-        // Field examId = ReflectionUtils.findField(Exam.class, "id");
-        // res.put("message", "Successfully created exam");
-        // res.put("examId", examId.toString());
-        // return ResponseEntity.ok().body(res);
 
         Exam exam =
             new Exam(

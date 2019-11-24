@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 import javax.validation.Valid;
+import com.easyexam.message.response.SuccessfulCreation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -81,12 +82,6 @@ public class ExamController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
     public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
-        // examRepository.save(exam);
-        // HashMap<String, String> res = new HashMap<>();
-        // Field examId = ReflectionUtils.findField(Exam.class, "id");
-        // res.put("message", "Successfully created exam");
-        // res.put("examId", examId.toString());
-        // return ResponseEntity.ok().body(res);
 
         Exam exam =
             new Exam(
@@ -107,6 +102,10 @@ public class ExamController {
             courseRepository.save(course);
         }
 
-        return ResponseEntity.ok().body("Successfully created exam");
+        Field field = ReflectionUtils.findField(Exam.class, "id");
+        ReflectionUtils.makeAccessible(field);
+        Long examId = (Long) ReflectionUtils.getField(field, exam);
+
+        return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
   }
 }

@@ -25,7 +25,8 @@ User API Docs
         "lastName": <NEW VALUE>, //optional
         "email": <NEW VALUE>, //optional
         "password": <NEW VALUE>, //optional
-        "role": [<NEW VALUE>] //optional
+        "role": [<NEW VALUE>], //optional
+        "points": [<NEW VALUE>] //optional
     }
     ```
     

@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -16,7 +17,9 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(
@@ -26,6 +29,11 @@ public class User extends TimestampedEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Column(name = "points", nullable = false)
+  @NotNull(message = "Points cannot be empty")
+  @Range(min = 0)
+  private Integer points;
 
   @NotBlank
   @Size(min = 3, max = 50)
@@ -59,6 +67,7 @@ public class User extends TimestampedEntity {
     this.lastName = lastName;
     this.email = email;
     this.password = password;
+    this.points = 0;
   }
 
   public Long getId() {
@@ -111,5 +120,11 @@ public class User extends TimestampedEntity {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+  public void setPoints(Integer points){
+      this.points = points;
+  }
+  public Integer getPoints(){
+      return this.points;
   }
 }

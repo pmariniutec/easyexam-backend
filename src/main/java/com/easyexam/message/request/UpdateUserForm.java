@@ -19,6 +19,15 @@ public class UpdateUserForm {
   @Size(min = 6, max = 40)
   private String password;
 
+  private int points;
+
+  public void setPoints(int points){
+      this.points = points;
+  }
+  public int getPoints(){
+      return this.points;
+  }
+
   public String getFirstName() {
     return firstName;
   }

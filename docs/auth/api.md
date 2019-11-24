@@ -1,11 +1,12 @@
 Authentication API Docs
 ----------------
+- NOTE: Possible user roles are: `['ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT']`
 
 - Login user
     ```
     POST /api/auth/login
     ```
-    Body:
+    Expects:
     ```
     {
         "email": "EMAIL",
@@ -13,17 +14,27 @@ Authentication API Docs
     }
     ```
 
+	Returns:
+	```
+		Success
+	```
+
 - Create new user 
     ```
     POST /api/auth/register
     ```
 
-    Body:
+    Expects:
     ```
     {
         "name": "NAME",
         "email": "EMAIL",
 		"password": "PASSWORD",
-		"role": "ROLE"
+		"role": [roles]
     }
     ```
+
+	Returns:
+	```
+		Success
+	```

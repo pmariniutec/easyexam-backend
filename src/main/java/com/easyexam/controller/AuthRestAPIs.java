@@ -1,5 +1,10 @@
 package com.easyexam.controller;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.Valid;
+
 import com.easyexam.message.request.LoginForm;
 import com.easyexam.message.request.RegisterForm;
 import com.easyexam.message.response.JwtResponse;
@@ -8,18 +13,15 @@ import com.easyexam.model.RoleName;
 import com.easyexam.model.User;
 import com.easyexam.repository.RoleRepository;
 import com.easyexam.repository.UserRepository;
-import com.easyexam.security.jwt.JwtUtils;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.validation.Valid;
+import com.easyexam.security.jwt.JwtToken;
+import com.easyexam.security.service.UserDetailsServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,90 +34,78 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthRestAPIs {
 
-  @Autowired AuthenticationManager authenticationManager;
+	@Autowired
+	AuthenticationManager authenticationManager;
 
-  @Autowired UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
 
-  @Autowired RoleRepository roleRepository;
+	@Autowired
+	RoleRepository roleRepository;
 
-  @Autowired PasswordEncoder encoder;
+	@Autowired
+	PasswordEncoder encoder;
 
-  @Autowired JwtUtils jwtUtils;
+	@Autowired
+	private JwtToken jwtToken;
 
-  @RequestMapping("/test")
-  public ResponseEntity<?> getAllUsers() {
-    List<Role> roles = roleRepository.findAll();
-    return ResponseEntity.ok(roles);
-  }
+	@Autowired
+	private UserDetailsServiceImpl userDetailsService;
 
-  @PostMapping("/login")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+	@PostMapping("/login")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassword()));
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
 
-    String jwtToken = jwtUtils.generateJwtToken(authentication);
-    return ResponseEntity.ok(new JwtResponse(jwtToken));
-  }
+		final String token = jwtToken.generateToken(userDetails);
 
-  @PostMapping("/register")
-  public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
+		return ResponseEntity.ok(new JwtResponse(token));
+	}
 
-    if (userRepository.existsByEmail(registerRequest.getEmail())) {
-      return new ResponseEntity<String>("Fail -> Email is already in use!", HttpStatus.BAD_REQUEST);
-    }
+	@PostMapping("/register")
+	public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
 
-    // Creating user account
-    User user =
-        new User(
-            registerRequest.getFirstName(),
-            registerRequest.getLastName(),
-            registerRequest.getEmail(),
-            encoder.encode(registerRequest.getPassword()));
+		if (userRepository.existsByEmail(registerRequest.getEmail())) {
+			return new ResponseEntity<String>("Error: Email is already in use", HttpStatus.BAD_REQUEST);
+		}
 
-    Set<String> strRoles = registerRequest.getRole();
-    Set<Role> roles = new HashSet<>();
+		// Creating user account
+		User user = new User(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail(),
+				encoder.encode(registerRequest.getPassword()));
 
-    strRoles.forEach(
-        role -> {
-          switch (role) {
-            case "admin":
-              Role adminRole =
-                  roleRepository
-                      .findByName(RoleName.ROLE_ADMIN)
-                      .orElseThrow(
-                          () -> new RuntimeException("Fail! -> Cause: User Role not find."));
-              roles.add(adminRole);
+		Set<String> strRoles = registerRequest.getRole();
+		Set<Role> roles = new HashSet<Role>();
 
-              break;
-            case "student":
-              Role studentRole =
-                  roleRepository
-                      .findByName(RoleName.ROLE_STUDENT)
-                      .orElseThrow(
-                          () -> new RuntimeException("Fail! -> Cause: User Role not find."));
-              roles.add(studentRole);
+		strRoles.forEach(role -> {
+			switch (role) {
+			case "ROLE_ADMIN":
+				Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+						.orElseThrow(() -> new RuntimeException("Error: User Role not found"));
+				roles.add(adminRole);
 
-              break;
-            case "teacher":
-              Role teacherRole =
-                  roleRepository
-                      .findByName(RoleName.ROLE_TEACHER)
-                      .orElseThrow(
-                          () -> new RuntimeException("Fail! -> Cause: User Role not find."));
-              roles.add(teacherRole);
+				break;
+			case "ROLE_STUDENT":
+				Role studentRole = roleRepository.findByName(RoleName.ROLE_STUDENT)
+						.orElseThrow(() -> new RuntimeException("Error: User Role not found"));
+				roles.add(studentRole);
 
-              break;
-          }
-        });
+				break;
+			case "ROLE_TEACHER":
+				Role teacherRole = roleRepository.findByName(RoleName.ROLE_TEACHER)
+						.orElseThrow(() -> new RuntimeException("Error: User Role not found"));
+				roles.add(teacherRole);
 
-    user.setRoles(roles);
-    userRepository.save(user);
+				break;
+			}
+		});
 
-    return ResponseEntity.ok().body("User registered successfully!");
-  }
+		user.setRoles(roles);
+		userRepository.save(user);
+
+		return ResponseEntity.ok().body("User registered successfully!");
+	}
+
 }

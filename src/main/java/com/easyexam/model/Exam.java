@@ -13,78 +13,96 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import javax.persistence.CascadeType;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "exams")
 public class Exam extends TimestampedEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 200)
-  private String title;
+	@NotBlank
+	@Size(min = 1, max = 200)
+	private String title;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "exam_questions",
-      joinColumns = @JoinColumn(name = "exam_id"),
-      inverseJoinColumns = @JoinColumn(name = "question_id"))
-  private List<Question> questions = new ArrayList<>();
+	@ManyToOne
+	private User user;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "exam_solutions",
-      joinColumns = @JoinColumn(name = "exam_id"),
-      inverseJoinColumns = @JoinColumn(name = "solution_id"))
-  private List<Solution> solutions = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinTable(name = "exam_questions", joinColumns = @JoinColumn(name = "exam_id"),
+			inverseJoinColumns = @JoinColumn(name = "question_id"))
+	private List<Question> questions = new ArrayList<Question>();
 
-  @NotBlank
-  @ElementCollection
-  @CollectionTable(name = "keywords")
-  private List<String> keywords = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "exam_solutions", joinColumns = @JoinColumn(name = "exam_id"),
+			inverseJoinColumns = @JoinColumn(name = "solution_id"))
+	private List<Solution> solutions = new ArrayList<Solution>();
 
-  public Exam(
-      String title, List<Question> questions, List<Solution> solutions, List<String> keywords) {
-    this.title = title;
-    this.questions = questions;
-    this.solutions = solutions;
-    this.keywords = keywords;
-  }
+	@ElementCollection
+	@CollectionTable(name = "keywords")
+	private List<String> keywords = new ArrayList<String>();
 
-  public String getTitle() {
-    return this.title;
-  }
+	public Exam() {
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public Exam(String title, List<Question> questions, List<String> keywords) {
+		this.title = title;
+		this.questions = questions;
+		this.keywords = keywords;
+	}
 
-  public List<Question> getQuestions() {
-    return this.questions;
-  }
+	public Long getId() {
+		return this.id;
+	}
 
-  public void setQuestions(List<Question> questions) {
-    this.questions = questions;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public List<Solution> getSolutions() {
-    return this.solutions;
-  }
+	public String getTitle() {
+		return this.title;
+	}
 
-  public void setSolutions(List<Solution> solutions) {
-    this.solutions = solutions;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public List<String> getKeywords() {
-    return this.keywords;
-  }
+	public List<Question> getQuestions() {
+		return this.questions;
+	}
 
-  public void setKeywords(List<String> keywords) {
-    this.keywords = keywords;
-  }
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
+
+	public List<Solution> getSolutions() {
+		return this.solutions;
+	}
+
+	public void setSolutions(List<Solution> solutions) {
+		this.solutions = solutions;
+	}
+
+	public List<String> getKeywords() {
+		return this.keywords;
+	}
+
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

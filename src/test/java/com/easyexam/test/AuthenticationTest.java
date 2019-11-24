@@ -9,9 +9,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class AuthenticationTest {
 
-  @Test
-  public void testLogin() throws Exception {}
+	@Test
+	public void testLogin() throws Exception {
+	}
 
-  @Test
-  public void testRegister() throws Exception {}
+	@Test
+	public void testRegister() throws Exception {
+	}
+
 }

@@ -17,39 +17,42 @@ import javax.validation.constraints.Size;
 @Table(name = "questions")
 public class Question extends TimestampedEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 200)
-  private String title;
+	@Size(min = 1, max = 200)
+	private String title;
 
-  @NotBlank
-  @Column(columnDefinition = "text")
-  private String content;
+	@NotBlank
+	@Column(columnDefinition = "text")
+	private String content;
 
-  @ManyToMany(mappedBy = "questions")
-  private List<Exam> exams = new ArrayList<>();
+	@ManyToMany(mappedBy = "questions")
+	private List<Exam> exams = new ArrayList<Exam>();
 
-  public Question(String title, String content) {
-    this.title = title;
-    this.content = content;
-  }
+	public Question() {
+	}
 
-  public String getTitle() {
-    return this.title;
-  }
+	public Question(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public String getTitle() {
+		return this.title;
+	}
 
-  public String getContent() {
-    return this.content;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+	public String getContent() {
+		return this.content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 }

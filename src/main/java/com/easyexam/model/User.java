@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -16,100 +17,115 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class User extends TimestampedEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @NotBlank
-  @Size(min = 3, max = 50)
-  private String firstName;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 3, max = 50)
-  private String lastName;
+	@Column(name = "points", nullable = false)
+	@NotNull(message = "Points cannot be empty")
+	@Range(min = 0)
+	private Integer points;
 
-  @NaturalId
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
+	@NotBlank
+	@Size(min = 3, max = 50)
+	private String firstName;
 
-  @NotBlank
-  @Size(min = 6, max = 100)
-  private String password;
+	@NotBlank
+	@Size(min = 3, max = 50)
+	private String lastName;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "user_roles",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+	@NaturalId
+	@NotBlank
+	@Size(max = 50)
+	@Email
+	private String email;
 
-  public User() {}
+	@NotBlank
+	@Size(min = 6, max = 100)
+	private String password;
 
-  public User(String firstName, String lastName, String email, String password) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-  }
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-  public Long getId() {
-    return id;
-  }
+	public User() {
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public User(String firstName, String lastName, String email, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.points = 0;
+	}
 
-  public String getFirstName() {
-    return firstName;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public String getLastName() {
-    return firstName;
-  }
+	public String getFirstName() {
+		return firstName;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public String getFullName() {
-    return firstName + ' ' + lastName;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public String getFullName() {
+		return firstName + ' ' + lastName;
+	}
 
-  public String getPassword() {
-    return password;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public Set<Role> getRoles() {
-    return roles;
-  }
+	public String getPassword() {
+		return password;
+	}
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setPoints(Integer points) {
+		this.points = points;
+	}
+
+	public Integer getPoints() {
+		return this.points;
+	}
+
 }

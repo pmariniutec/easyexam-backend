@@ -3,6 +3,8 @@
 
 # Log file
 *.log
+*.log.*.gz
+logstash/
 
 # BlueJ files
 *.ctxt
@@ -44,3 +46,7 @@ nbdist/
 .nb-gradle/
 
 .mvn/
+*.pem
+ssh-ec2
+
+.vim

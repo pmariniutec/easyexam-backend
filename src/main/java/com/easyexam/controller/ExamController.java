@@ -7,6 +7,7 @@ import com.easyexam.repository.ExamRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.util.ReflectionUtils;
+import java.lang.reflect.Field;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -49,22 +52,28 @@ public class ExamController {
     return ResponseEntity.ok(exam.orElse(null));
   }
 
-  @PostMapping("/create")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
-    Exam exam =
-        new Exam(
-            createExamRequest.getTitle(),
-            createExamRequest.getQuestions(),
-            createExamRequest.getKeywords());
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+    public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
+        // examRepository.save(exam);
+        // HashMap<String, String> res = new HashMap<>();
+        // Field examId = ReflectionUtils.findField(Exam.class, "id");
+        // res.put("message", "Successfully created exam");
+        // res.put("examId", examId.toString());
+        // return ResponseEntity.ok().body(res);
 
-    // get authenticated user
-    User user = authenticationUtils.getUserObject();
-    exam.setUser(user);
+        Exam exam =
+            new Exam(
+                createExamRequest.getTitle(),
+                createExamRequest.getQuestions(),
+                createExamRequest.getKeywords());
 
-    // TODO: Search each question solution (if present) and add it
+        User user = authenticationUtils.getUserObject();
+        exam.setUser(user);
 
-    examRepository.save(exam);
-    return ResponseEntity.ok().body("Successfully created exam");
+        // TODO: Search each question solution (if present) and add it
+
+        examRepository.save(exam);
+        return ResponseEntity.ok().body("Successfully created exam");
   }
 }

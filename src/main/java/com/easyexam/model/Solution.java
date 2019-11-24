@@ -76,4 +76,8 @@ public class Solution extends TimestampedEntity {
 		this.question = question;
 	}
 
+	public void removeExam(Exam exam) {
+		this.exams.remove(exam);
+	}
+
 }

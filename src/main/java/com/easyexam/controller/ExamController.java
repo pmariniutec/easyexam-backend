@@ -4,6 +4,8 @@ import com.easyexam.message.request.CreateExamForm;
 import com.easyexam.model.Course;
 import com.easyexam.model.Exam;
 import com.easyexam.model.User;
+import com.easyexam.model.Question;
+import com.easyexam.model.Solution;
 import com.easyexam.repository.CourseRepository;
 import com.easyexam.repository.ExamRepository;
 import com.easyexam.security.jwt.JwtUtils;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,11 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/exam")
 public class ExamController {
+
+	private static final Logger log = LoggerFactory.getLogger(ExamController.class);
 
 	@Autowired
 	CourseRepository courseRepository;
@@ -100,8 +107,9 @@ public class ExamController {
 
 		if (createExamRequest.getCourseId() != null) {
 			Course course = courseRepository.getOne(createExamRequest.getCourseId());
-			course.setExam(savedExam);
+			course.addExam(savedExam);
 			courseRepository.save(course);
+			examRepository.save(exam);
 		}
 
 		Field field = ReflectionUtils.findField(Exam.class, "id");
@@ -109,6 +117,34 @@ public class ExamController {
 		Long examId = (Long) ReflectionUtils.getField(field, exam);
 
 		return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
+	}
+
+	@DeleteMapping("/{examId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> deleteExam(@PathVariable String examId) {
+		Long id = Long.valueOf(examId);
+		Optional<Exam> exam = examRepository.findById(id);
+
+		if (!exam.isPresent()) {
+			return ResponseEntity.badRequest().body("Cannot find exam by that id");
+		}
+
+		Optional<Course> course = Optional.of(exam.get().getCourse());
+		if (course.isPresent()) {
+			course.get().removeExam(exam.get());
+		}
+
+		for (Question q : exam.get().getQuestions()) {
+			q.removeExam(exam.get());
+		}
+
+		for (Solution s : exam.get().getSolutions()) {
+			s.removeExam(exam.get());
+		}
+
+		examRepository.delete(exam.get());
+
+		return ResponseEntity.ok().body("Successfully deleted Exam with id: " + examId);
 	}
 
 }

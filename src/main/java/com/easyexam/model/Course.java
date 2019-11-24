@@ -3,6 +3,7 @@ package com.easyexam.model;
 import com.easyexam.model.utils.TimestampedEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Set;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -38,10 +40,8 @@ public class Course extends TimestampedEntity {
 	@ManyToOne
 	private User user;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "course_exams", joinColumns = @JoinColumn(name = "course_id"),
-			inverseJoinColumns = @JoinColumn(name = "exam_id"))
-	private List<Exam> exams;
+	@OneToMany(mappedBy = "course")
+	private Set<Exam> exams;
 
 	public Course() {
 	}
@@ -75,16 +75,21 @@ public class Course extends TimestampedEntity {
 		this.code = code;
 	}
 
-	public List<Exam> getExams() {
+	public Set<Exam> _getExams() {
 		return this.exams;
 	}
 
-	public void setExams(List<Exam> exams) {
+	public void setExams(Set<Exam> exams) {
 		this.exams = exams;
 	}
 
-	public void setExam(Exam exam) {
+	public void addExam(Exam exam) {
 		this.exams.add(exam);
+		exam.setCourse(this);
+	}
+
+	public void removeExam(Exam exam) {
+		this.exams.remove(exam);
 	}
 
 	public User getUser() {

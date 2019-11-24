@@ -9,8 +9,9 @@ Exams API Docs
     ```
     {
         "title": "TITLE",
-		"questions": [{ "content": "CONTENT" }, { "content": "CONTENT" }, ...],
-		"keywords": ["key1", "key2", ...]
+		    "questions": [{ "content": "CONTENT" }, { "content": "CONTENT" }, ...],
+		    "keywords": ["key1", "key2", ...],
+        "courseId" : "ID" // NOT REQUIRED
     }
     ```
 

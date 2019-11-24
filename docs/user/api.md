@@ -3,7 +3,7 @@ User API Docs
 
 - Get User Data
     ```
-    POST /api/user/
+    GET /api/user/
     ```
     Expects:
     ```

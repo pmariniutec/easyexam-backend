@@ -48,6 +48,10 @@ public class Exam extends TimestampedEntity {
 	@CollectionTable(name = "keywords")
 	private List<String> keywords = new ArrayList<String>();
 
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private Course course;
+
 	public Exam() {
 	}
 
@@ -97,12 +101,24 @@ public class Exam extends TimestampedEntity {
 		this.keywords = keywords;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public User getUser() {
 		return this.user;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public Course getCourse() {
+		return this.course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+    public void removeCourse(Course course) {
+        this.course = null;
 	}
 
 }

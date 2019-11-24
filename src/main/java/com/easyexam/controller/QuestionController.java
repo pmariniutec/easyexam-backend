@@ -24,39 +24,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/question")
 public class QuestionController {
 
-  @Autowired QuestionRepository questionRepository;
-  @Autowired AuthenticationUtils authenticationUtils;
+	@Autowired
+	QuestionRepository questionRepository;
+
+	@Autowired
+	AuthenticationUtils authenticationUtils;
 
 	@Autowired
 	JwtUtils jwtUtils;
-		
-  @GetMapping("")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+
+	@GetMapping("")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> getQuestions() {
-    String email = authenticationUtils.getAuthenticatedUserEmail();
+		String email = authenticationUtils.getAuthenticatedUserEmail();
 
-    Optional<List<Question>> questions = questionRepository.getQuestions();
-    return ResponseEntity.ok(questions.orElse(List.of()));
-  }
+		Optional<List<Question>> questions = questionRepository.getQuestions();
+		return ResponseEntity.ok(questions.orElse(List.of()));
+	}
 
-  @GetMapping("/{questionId}")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> getQuestionById(@PathVariable String questionId) {
-    Long id = Long.valueOf(questionId);
+	@GetMapping("/{questionId}")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getQuestionById(@PathVariable String questionId) {
+		Long id = Long.valueOf(questionId);
 
-    Optional<Question> question = questionRepository.findById(id);
-    return ResponseEntity.ok(question.orElse(null));
-  }
+		Optional<Question> question = questionRepository.findById(id);
+		return ResponseEntity.ok(question.orElse(null));
+	}
 
-  @PostMapping("/create")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> createQuestion(
-      @Valid @RequestBody CreateQuestionForm createQuestionRequest) {
+	@PostMapping("/create")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
 
-    Question question =
-        new Question(createQuestionRequest.getTitle(), createQuestionRequest.getContent());
+		Question question = new Question(createQuestionRequest.getTitle(), createQuestionRequest.getContent());
 
-    questionRepository.save(question);
-    return ResponseEntity.ok().body("Successfully created question");
-  }
+		questionRepository.save(question);
+		return ResponseEntity.ok().body("Successfully created question");
+	}
+
 }

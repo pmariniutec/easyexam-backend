@@ -13,64 +13,67 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CreateExamForm {
-    private static final Logger log = LoggerFactory.getLogger(CreateExamForm.class);
-    
-    @NotBlank
-    @Size(min = 1, max = 200)
-    private String title;
-    @Autowired
-    QuestionRepository questionRepository;
 
-    private User user;
-    
-    private List<Question> questions = new ArrayList<Question>();
-    // private List<Solution> solutions = new ArrayList<Solution>();
-    private List<String> keywords = new ArrayList<String>();
+	private static final Logger log = LoggerFactory.getLogger(CreateExamForm.class);
 
-  private Long courseId;
+	@NotBlank
+	@Size(min = 1, max = 200)
+	private String title;
 
-  public String getTitle() {
-    return this.title;
-  }
+	@Autowired
+	QuestionRepository questionRepository;
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	private User user;
 
-  public User getUser() {
-    return this.user;
-  }
+	private List<Question> questions = new ArrayList<Question>();
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	// private List<Solution> solutions = new ArrayList<Solution>();
+	private List<String> keywords = new ArrayList<String>();
 
-    public List<Question> getQuestions() {
-            return this.questions;
-    }
+	private Long courseId;
 
+	public String getTitle() {
+		return this.title;
+	}
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setQuestion(Question question) {
-        this.questions.add(question);
-    }
+	public User getUser() {
+		return this.user;
+	}
 
-  public List<String> getKeywords() {
-    return this.keywords;
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-  public void setKeywords(List<String> keywords) {
-    this.keywords = keywords;
-  }
+	public List<Question> getQuestions() {
+		return this.questions;
+	}
 
-  public Long getCourseId() {
-    return this.courseId;
-  }
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
 
-  public void setCourseId(Long courseId) {
-    this.courseId = courseId;
-  }
+	public void setQuestion(Question question) {
+		this.questions.add(question);
+	}
+
+	public List<String> getKeywords() {
+		return this.keywords;
+	}
+
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
+	}
+
+	public Long getCourseId() {
+		return this.courseId;
+	}
+
+	public void setCourseId(Long courseId) {
+		this.courseId = courseId;
+	}
+
 }

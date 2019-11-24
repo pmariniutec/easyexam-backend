@@ -8,51 +8,52 @@ import javax.validation.constraints.*;
 
 public class CreateCourseForm {
 
-  @NotBlank
-  @Size(min = 1, max = 60)
-  private String name;
+	@NotBlank
+	@Size(min = 1, max = 60)
+	private String name;
 
-  @NotBlank
-  @Size(min = 5, max = 20)
-  private String code;
+	@NotBlank
+	@Size(min = 5, max = 20)
+	private String code;
 
-  private User user;
+	private User user;
 
-  private List<Exam> exams = new ArrayList<Exam>();
+	private List<Exam> exams = new ArrayList<Exam>();
 
-  public String getName() {
-    return this.name;
-  }
+	public String getName() {
+		return this.name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public String getCode() {
-    return this.code;
-  }
+	public String getCode() {
+		return this.code;
+	}
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-  public User getUser() {
-    return this.user;
-  }
+	public User getUser() {
+		return this.user;
+	}
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-  public List<Exam> getExams() {
-    return this.exams;
-  }
+	public List<Exam> getExams() {
+		return this.exams;
+	}
 
-  public void setExams(List<Exam> exams) {
-    this.exams = exams;
-  }
+	public void setExams(List<Exam> exams) {
+		this.exams = exams;
+	}
 
-  public void setExam(Exam exam) {
-    this.exams.add(exam);
-  }
+	public void setExam(Exam exam) {
+		this.exams.add(exam);
+	}
+
 }

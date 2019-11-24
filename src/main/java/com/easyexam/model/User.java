@@ -22,109 +22,110 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class User extends TimestampedEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @Column(name = "points", nullable = false)
-  @NotNull(message = "Points cannot be empty")
-  @Range(min = 0)
-  private Integer points;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 3, max = 50)
-  private String firstName;
+	@Column(name = "points", nullable = false)
+	@NotNull(message = "Points cannot be empty")
+	@Range(min = 0)
+	private Integer points;
 
-  @NotBlank
-  @Size(min = 3, max = 50)
-  private String lastName;
+	@NotBlank
+	@Size(min = 3, max = 50)
+	private String firstName;
 
-  @NaturalId
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
+	@NotBlank
+	@Size(min = 3, max = 50)
+	private String lastName;
 
-  @NotBlank
-  @Size(min = 6, max = 100)
-  private String password;
+	@NaturalId
+	@NotBlank
+	@Size(max = 50)
+	@Email
+	private String email;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "user_roles",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+	@NotBlank
+	@Size(min = 6, max = 100)
+	private String password;
 
-  public User() {}
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-  public User(String firstName, String lastName, String email, String password) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-    this.points = 0;
-  }
+	public User() {
+	}
 
-  public Long getId() {
-    return id;
-  }
+	public User(String firstName, String lastName, String email, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.points = 0;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public String getFirstName() {
-    return firstName;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+	public String getFirstName() {
+		return firstName;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public String getFullName() {
-    return firstName + ' ' + lastName;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public String getFullName() {
+		return firstName + ' ' + lastName;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public String getPassword() {
-    return password;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+	public String getPassword() {
+		return password;
+	}
 
-  public Set<Role> getRoles() {
-    return roles;
-  }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
-  public void setPoints(Integer points){
-      this.points = points;
-  }
-  public Integer getPoints(){
-      return this.points;
-  }
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setPoints(Integer points) {
+		this.points = points;
+	}
+
+	public Integer getPoints() {
+		return this.points;
+	}
+
 }

@@ -22,54 +22,46 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired private JwtAuthEntryPoint jwtAuthenticationEntryPoint;
+	@Autowired
+	private JwtAuthEntryPoint jwtAuthenticationEntryPoint;
 
-  @Autowired private UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	private UserDetailsServiceImpl userDetailsService;
 
-  @Autowired private JwtRequestFilter jwtRequestFilter;
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
 
-  @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  }
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
 
-  @Bean
-  public JwtAuthEntryPoint jwtAuthenticationEntryPointBean() throws Exception {
-    return new JwtAuthEntryPoint();
-  }
+	@Bean
+	public JwtAuthEntryPoint jwtAuthenticationEntryPointBean() throws Exception {
+		return new JwtAuthEntryPoint();
+	}
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-  @Bean
-  @Override
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
-  }
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-  @Override
-  protected void configure(HttpSecurity httpSecurity) throws Exception {
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-    httpSecurity
-        .cors()
-        .and()
-        .csrf()
-        .disable()
-        .authorizeRequests()
-        .antMatchers("/api/auth/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .exceptionHandling()
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		httpSecurity.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/auth/**").permitAll()
+				.anyRequest().authenticated().and().exceptionHandling()
+				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-    httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-  }
+		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	}
+
 }

@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 public class EasyExamApiApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(EasyExamApiApplication.class, args);
-  }
+	public static void main(String[] args) {
+		SpringApplication.run(EasyExamApiApplication.class, args);
+	}
+
 }

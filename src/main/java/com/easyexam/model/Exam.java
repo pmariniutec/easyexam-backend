@@ -23,87 +23,86 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "exams")
 public class Exam extends TimestampedEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 200)
-  private String title;
+	@NotBlank
+	@Size(min = 1, max = 200)
+	private String title;
 
-  @ManyToOne private User user;
+	@ManyToOne
+	private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-  @JoinTable(
-      name = "exam_questions",
-      joinColumns = @JoinColumn(name = "exam_id"),
-      inverseJoinColumns = @JoinColumn(name = "question_id"))
-  private List<Question> questions = new ArrayList<Question>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinTable(name = "exam_questions", joinColumns = @JoinColumn(name = "exam_id"),
+			inverseJoinColumns = @JoinColumn(name = "question_id"))
+	private List<Question> questions = new ArrayList<Question>();
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "exam_solutions",
-      joinColumns = @JoinColumn(name = "exam_id"),
-      inverseJoinColumns = @JoinColumn(name = "solution_id"))
-  private List<Solution> solutions = new ArrayList<Solution>();
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "exam_solutions", joinColumns = @JoinColumn(name = "exam_id"),
+			inverseJoinColumns = @JoinColumn(name = "solution_id"))
+	private List<Solution> solutions = new ArrayList<Solution>();
 
-  @ElementCollection
-  @CollectionTable(name = "keywords")
-  private List<String> keywords = new ArrayList<String>();
+	@ElementCollection
+	@CollectionTable(name = "keywords")
+	private List<String> keywords = new ArrayList<String>();
 
-  public Exam() {}
+	public Exam() {
+	}
 
-  public Exam(String title, List<Question> questions, List<String> keywords) {
-    this.title = title;
-    this.questions = questions;
-    this.keywords = keywords;
-  }
+	public Exam(String title, List<Question> questions, List<String> keywords) {
+		this.title = title;
+		this.questions = questions;
+		this.keywords = keywords;
+	}
 
-  public Long getId() {
-    return this.id;
-  }
+	public Long getId() {
+		return this.id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public String getTitle() {
-    return this.title;
-  }
+	public String getTitle() {
+		return this.title;
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public List<Question> getQuestions() {
-    return this.questions;
-  }
+	public List<Question> getQuestions() {
+		return this.questions;
+	}
 
-  public void setQuestions(List<Question> questions) {
-    this.questions = questions;
-  }
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
 
-  public List<Solution> getSolutions() {
-    return this.solutions;
-  }
+	public List<Solution> getSolutions() {
+		return this.solutions;
+	}
 
-  public void setSolutions(List<Solution> solutions) {
-    this.solutions = solutions;
-  }
+	public void setSolutions(List<Solution> solutions) {
+		this.solutions = solutions;
+	}
 
-  public List<String> getKeywords() {
-    return this.keywords;
-  }
+	public List<String> getKeywords() {
+		return this.keywords;
+	}
 
-  public void setKeywords(List<String> keywords) {
-    this.keywords = keywords;
-  }
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
+	}
 
-  public User getUser() {
-    return this.user;
-  }
+	public User getUser() {
+		return this.user;
+	}
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

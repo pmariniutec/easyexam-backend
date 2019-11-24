@@ -13,76 +13,82 @@ import org.springframework.stereotype.Component;
 @Component
 public class LatexCompiler {
 
-  public final File WORKING_DIRECTORY = new File(".");
-  public String BASE_PATH;
-  private static String OS = System.getProperty("os.name").toLowerCase();
+	public final File WORKING_DIRECTORY = new File(".");
 
-  public LatexCompiler() {
-    try {
-      this.BASE_PATH = WORKING_DIRECTORY.getCanonicalPath() + "/tex/files/";
-            new File(this.BASE_PATH).mkdirs(); //create BASE_PATH if not exists
-    } catch (IOException e) {
-      System.out.println(e);
-    }
-  }
+	public String BASE_PATH;
 
-  public static byte[] toByteArray(InputStream in) throws IOException {
+	private static String OS = System.getProperty("os.name").toLowerCase();
 
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
+	public LatexCompiler() {
+		try {
+			this.BASE_PATH = WORKING_DIRECTORY.getCanonicalPath() + "/tex/files/";
+			new File(this.BASE_PATH).mkdirs(); // create BASE_PATH if not exists
+		}
+		catch (IOException e) {
+			System.out.println(e);
+		}
+	}
 
-    byte[] buffer = new byte[1024];
-    int len;
+	public static byte[] toByteArray(InputStream in) throws IOException {
 
-    while ((len = in.read(buffer)) != -1) {
-      os.write(buffer, 0, len);
-    }
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-    return os.toByteArray();
-  }
+		byte[] buffer = new byte[1024];
+		int len;
 
-  private void writeToFile(String input, String filename) throws IOException {
-    BufferedWriter writer = new BufferedWriter(new FileWriter(BASE_PATH + filename));
-    writer.write(input);
-    writer.close();
-  }
+		while ((len = in.read(buffer)) != -1) {
+			os.write(buffer, 0, len);
+		}
 
-  public void compile(String latexString, String filename) {
-    String s;
+		return os.toByteArray();
+	}
 
-    try {
-      this.writeToFile(latexString, filename);
-      String executable;
+	private void writeToFile(String input, String filename) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(BASE_PATH + filename));
+		writer.write(input);
+		writer.close();
+	}
 
-      if (OS.indexOf("mac") >= 0) {
-          executable = "/Library/TeX/texbin/pdflatex";
-      }
-      else {
-          executable = "/usr/bin/pdflatex";
-      }
-        System.out.println("pdflatex path:");
-        System.out.println(executable);
+	public void compile(String latexString, String filename) {
+		String s;
 
-      String command = executable + " -output-directory=" + BASE_PATH + " " + BASE_PATH + filename;
-      Process process = Runtime.getRuntime().exec(command);
+		try {
+			this.writeToFile(latexString, filename);
+			String executable;
 
-      BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-      BufferedReader error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+			if (OS.indexOf("mac") >= 0) {
+				executable = "/Library/TeX/texbin/pdflatex";
+			}
+			else {
+				executable = "/usr/bin/pdflatex";
+			}
+			System.out.println("pdflatex path:");
+			System.out.println(executable);
 
-      System.out.println("Standard IN:\n");
-      while ((s = input.readLine()) != null) {
-        System.out.println(s);
-      }
+			String command = executable + " -output-directory=" + BASE_PATH + " " + BASE_PATH + filename;
+			Process process = Runtime.getRuntime().exec(command);
 
-      System.out.println("Standard ERROR:\n");
-      while ((s = error.readLine()) != null) {
-        System.out.println(s);
-      }
+			BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			BufferedReader error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.exit(-1);
-    }
-  }
+			System.out.println("Standard IN:\n");
+			while ((s = input.readLine()) != null) {
+				System.out.println(s);
+			}
+
+			System.out.println("Standard ERROR:\n");
+			while ((s = error.readLine()) != null) {
+				System.out.println(s);
+			}
+
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
 }

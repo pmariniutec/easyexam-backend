@@ -23,55 +23,57 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "solutions")
 public class Solution extends TimestampedEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 200)
-  private String title;
+	@NotBlank
+	@Size(min = 1, max = 200)
+	private String title;
 
-  @NotBlank
-  @Column(columnDefinition = "text")
-  private String content;
+	@NotBlank
+	@Column(columnDefinition = "text")
+	private String content;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "question_id", nullable = true)
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  @JsonIgnore
-  private Question question;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "question_id", nullable = true)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Question question;
 
-  @ManyToMany(mappedBy = "solutions")
-  private List<Exam> exams = new ArrayList<>();
+	@ManyToMany(mappedBy = "solutions")
+	private List<Exam> exams = new ArrayList<>();
 
-  public Solution() {}
+	public Solution() {
+	}
 
-  public Solution(String title, String content) {
-    this.title = title;
-    this.content = content;
-  }
+	public Solution(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
 
-  public String getTitle() {
-    return this.title;
-  }
+	public String getTitle() {
+		return this.title;
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public String getContent() {
-    return this.content;
-  }
+	public String getContent() {
+		return this.content;
+	}
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-  public Question getQuestion() {
-    return this.question;
-  }
+	public Question getQuestion() {
+		return this.question;
+	}
 
-  public void setQuestion(Question question) {
-    this.question = question;
-  }
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+
 }

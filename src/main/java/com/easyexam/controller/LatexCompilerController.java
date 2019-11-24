@@ -20,42 +20,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/latex")
 public class LatexCompilerController {
 
-  @Autowired LatexCompiler latexCompiler;
-  @Autowired JwtUtils jwtUtils;
+	@Autowired
+	LatexCompiler latexCompiler;
 
-  @PostMapping("/compile")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> compileLatex(@Valid @RequestBody String latexString) {
+	@Autowired
+	JwtUtils jwtUtils;
 
-    ResponseEntity<?> respEntity = null;
+	@PostMapping("/compile")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> compileLatex(@Valid @RequestBody String latexString) {
 
-    String filename = "compile.tex";
-    latexCompiler.compile(latexString.replaceAll("\\\\n", "\n"), filename);
+		ResponseEntity<?> respEntity = null;
 
-    File result = new File(latexCompiler.BASE_PATH + filename);
+		String filename = "compile.tex";
+		latexCompiler.compile(latexString.replaceAll("\\\\n", "\n"), filename);
 
-    if (result.exists()) {
-      try {
-        InputStream inputStream =
-            new FileInputStream(latexCompiler.BASE_PATH + filename.replace(".tex", ".pdf"));
-        String type = result.toURI().toURL().openConnection().guessContentTypeFromName(filename);
+		File result = new File(latexCompiler.BASE_PATH + filename);
 
-        byte[] out = LatexCompiler.toByteArray(inputStream);
+		if (result.exists()) {
+			try {
+				InputStream inputStream = new FileInputStream(
+						latexCompiler.BASE_PATH + filename.replace(".tex", ".pdf"));
+				String type = result.toURI().toURL().openConnection().guessContentTypeFromName(filename);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("content-disposition", "attachment; filename=" + filename);
-        responseHeaders.add("Content-Type", type);
+				byte[] out = LatexCompiler.toByteArray(inputStream);
 
-        respEntity = new ResponseEntity<byte[]>(out, responseHeaders, HttpStatus.OK);
-      } catch (Exception e) {
-        System.out.println(e);
-      }
-    } else {
-      respEntity =
-          new ResponseEntity<String>(
-              "File Not Found. There was an error during compilation.", HttpStatus.OK);
-    }
+				HttpHeaders responseHeaders = new HttpHeaders();
+				responseHeaders.add("content-disposition", "attachment; filename=" + filename);
+				responseHeaders.add("Content-Type", type);
 
-    return respEntity;
-  }
+				respEntity = new ResponseEntity<byte[]>(out, responseHeaders, HttpStatus.OK);
+			}
+			catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+		else {
+			respEntity = new ResponseEntity<String>("File Not Found. There was an error during compilation.",
+					HttpStatus.OK);
+		}
+
+		return respEntity;
+	}
+
 }

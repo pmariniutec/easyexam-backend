@@ -2,28 +2,30 @@
 package com.easyexam.message.response;
 
 public class SuccessfulCreation {
-    private Long id;
-    private String message;
 
-    public SuccessfulCreation(Long id, String type) {
-        this.id = id;
-        this.message = "Successfully created " + type;
-    }
+	private Long id;
 
-    public Long getId() {
-        return this.id;
-    }
+	private String message;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public SuccessfulCreation(Long id, String type) {
+		this.id = id;
+		this.message = "Successfully created " + type;
+	}
 
-    public String getmessage() {
-        return this.message;
-    }
+	public Long getId() {
+		return this.id;
+	}
 
-    public void setmessage(String message) {
-        this.message = message;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getmessage() {
+		return this.message;
+	}
+
+	public void setmessage(String message) {
+		this.message = message;
+	}
 
 }

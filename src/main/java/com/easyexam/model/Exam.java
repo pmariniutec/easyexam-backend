@@ -117,4 +117,8 @@ public class Exam extends TimestampedEntity {
 		this.course = course;
 	}
 
+    public void removeCourse(Course course) {
+        this.course = null;
+	}
+
 }

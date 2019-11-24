@@ -28,7 +28,6 @@ public class CreateExamForm {
 	private List<Question> questions = new ArrayList<Question>();
 
 	// private List<Solution> solutions = new ArrayList<Solution>();
-	private List<String> keywords = new ArrayList<String>();
 
 	private Long courseId;
 
@@ -58,15 +57,7 @@ public class CreateExamForm {
 
 	public void setQuestion(Question question) {
 		this.questions.add(question);
-	}
-
-	public List<String> getKeywords() {
-		return this.keywords;
-	}
-
-	public void setKeywords(List<String> keywords) {
-		this.keywords = keywords;
-	}
+	}	
 
 	public Long getCourseId() {
 		return this.courseId;

@@ -3,8 +3,6 @@ package com.easyexam.model;
 import com.easyexam.model.utils.TimestampedEntity;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -43,11 +41,7 @@ public class Exam extends TimestampedEntity {
 	@JoinTable(name = "exam_solutions", joinColumns = @JoinColumn(name = "exam_id"),
 			inverseJoinColumns = @JoinColumn(name = "solution_id"))
 	private List<Solution> solutions = new ArrayList<Solution>();
-
-	@ElementCollection
-	@CollectionTable(name = "keywords")
-	private List<String> keywords = new ArrayList<String>();
-
+  	
 	@ManyToOne
 	@JoinColumn(name = "course_id")
 	private Course course;
@@ -55,10 +49,9 @@ public class Exam extends TimestampedEntity {
 	public Exam() {
 	}
 
-	public Exam(String title, List<Question> questions, List<String> keywords) {
+	public Exam(String title, List<Question> questions) {
 		this.title = title;
 		this.questions = questions;
-		this.keywords = keywords;
 	}
 
 	public Long getId() {
@@ -91,15 +84,7 @@ public class Exam extends TimestampedEntity {
 
 	public void setSolutions(List<Solution> solutions) {
 		this.solutions = solutions;
-	}
-
-	public List<String> getKeywords() {
-		return this.keywords;
-	}
-
-	public void setKeywords(List<String> keywords) {
-		this.keywords = keywords;
-	}
+	}	
 
 	public void setUser(User user) {
 		this.user = user;

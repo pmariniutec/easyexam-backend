@@ -3,7 +3,9 @@ package com.easyexam.model;
 import com.easyexam.model.utils.TimestampedEntity;
 import java.util.List;
 import java.util.ArrayList;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,12 +33,17 @@ public class Question extends TimestampedEntity {
 	@ManyToMany(mappedBy = "questions")
 	private List<Exam> exams = new ArrayList<Exam>();
 
+  @ElementCollection
+	@CollectionTable(name = "keywords")
+	private List<String> keywords = new ArrayList<String>();
+
 	public Question() {
 	}
 
-	public Question(String title, String content) {
+	public Question(String title, String content, List<String> keywords) {
 		this.title = title;
 		this.content = content;
+    this.keywords = keywords;
 	}
 
 	public String getTitle() {
@@ -53,6 +60,14 @@ public class Question extends TimestampedEntity {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+  public List<String> getKeywords() {
+		return this.keywords;
+	}
+
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
 	}
 
 	public void removeExam(Exam exam) {

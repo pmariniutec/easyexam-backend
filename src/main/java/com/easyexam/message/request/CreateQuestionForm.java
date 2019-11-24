@@ -14,6 +14,8 @@ public class CreateQuestionForm {
 	@NotBlank
 	private String content;
 
+  private List<String> keywords = new ArrayList<String>();
+
 	public String getTitle() {
 		return this.title;
 	}
@@ -28,6 +30,14 @@ public class CreateQuestionForm {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+  public List<String> getKeywords() {
+		return this.keywords;
+	}
+
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
 	}
 
 }

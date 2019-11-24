@@ -3,6 +3,7 @@ package com.easyexam.model;
 import com.easyexam.model.utils.TimestampedEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Set;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,10 +39,8 @@ public class Course extends TimestampedEntity {
 	@ManyToOne
 	private User user;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "course_exams", joinColumns = @JoinColumn(name = "course_id"),
-			inverseJoinColumns = @JoinColumn(name = "exam_id"))
-	private List<Exam> exams;
+	@OneToMany(mappedBy = "course")
+	private Set<Exam> exams;
 
 	public Course() {
 	}

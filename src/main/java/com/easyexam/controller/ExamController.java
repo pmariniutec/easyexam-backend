@@ -109,4 +109,25 @@ public class ExamController {
 
 		return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
 	}
+
+  @DeleteMapping("/{examId}")
+  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+  public ResponseEntity<?> deleteExam(@PathVariable String examId) {
+    Long id = Long.valueOf(examId);
+    Optional<Exam> exam = examRepository.findById(id);
+
+    if (!exam.isPresent()) {
+      return ResponseEntity.badRequest().body("Cannot find exam by that id");
+    }
+
+    exam.getCourse().remove(exam);
+    
+    for (Question q : exam.getQuestions()) {
+      q.getExams().remove(exam);
+    }
+
+    for (Solution s : exam.getSolutions()) {
+      s.getExams().remove(exam);
+    }
+  }
 }

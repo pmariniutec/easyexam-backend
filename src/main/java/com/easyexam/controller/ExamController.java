@@ -10,6 +10,7 @@ import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,29 +78,35 @@ public class ExamController {
         return ResponseEntity.ok().body("Successfully updated the exam.");
 
   }
-  @PostMapping("/create")
-  @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
-    Exam exam =
-        new Exam(
-            createExamRequest.getTitle(),
-            createExamRequest.getQuestions(),
-            createExamRequest.getKeywords());
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+    public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
+        // examRepository.save(exam);
+        // HashMap<String, String> res = new HashMap<>();
+        // Field examId = ReflectionUtils.findField(Exam.class, "id");
+        // res.put("message", "Successfully created exam");
+        // res.put("examId", examId.toString());
+        // return ResponseEntity.ok().body(res);
 
-    // get authenticated user
-    User user = authenticationUtils.getUserObject();
-    exam.setUser(user); 
+        Exam exam =
+            new Exam(
+                createExamRequest.getTitle(),
+                createExamRequest.getQuestions(),
+                createExamRequest.getKeywords());
 
-    // TODO: Search each question solution (if present) and add it
+        User user = authenticationUtils.getUserObject();
+        exam.setUser(user);
+  
+        // TODO: Search each question solution (if present) and add it
 
-    Exam savedExam = examRepository.saveAndFlush(exam);
+        Exam savedExam = examRepository.saveAndFlush(exam);
 
-    if (createExamRequest.getCourseId() != null) {
-      Course course = courseRepository.getOne(createExamRequest.getCourseId());
-      course.setExam(savedExam);
-      courseRepository.save(course);
-    }
+        if (createExamRequest.getCourseId() != null) {
+            Course course = courseRepository.getOne(createExamRequest.getCourseId());
+            course.setExam(savedExam);
+            courseRepository.save(course);
+        }
 
-    return ResponseEntity.ok().body("Successfully created exam");
+        return ResponseEntity.ok().body("Successfully created exam");
   }
 }

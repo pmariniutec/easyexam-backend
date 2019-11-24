@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.persistence.CascadeType;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -32,7 +33,7 @@ public class Exam extends TimestampedEntity {
 
   @ManyToOne private User user;
 
-  @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
   @JoinTable(
       name = "exam_questions",
       joinColumns = @JoinColumn(name = "exam_id"),

@@ -71,18 +71,22 @@ public class CourseController {
   @PostMapping("/exam/add")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
   public ResponseEntity<?> addExamToCourse(@Valid @RequestBody AddExamToCourseForm addExamRequest) {
-    // TODO: Handle exceptions
-    Course course = courseRepository.getOne(addExamRequest.getCourseId());
-    Optional<Exam> exam = examRepository.findById(addExamRequest.getExamId());
-    course.setExam(exam.get());
+    Optional<Course> course = courseRepository.findById(addExamRequest.getCourseId());
+    if(!course.isPresent()){
+        return ResponseEntity.badRequest().body("Course does not exist");
+    }
 
-    courseRepository.save(course);
+    Optional<Exam> exam = examRepository.findById(addExamRequest.getExamId());
+    //TODO If cannot find exam then create a new empty one
+    course.get().setExam(exam.get());
+
+    courseRepository.save(course.get());
     return ResponseEntity.ok().body("Successfully added exam to course");
   }
 
   @DeleteMapping("{courseId}")
   @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-  public ResponseEntity<?> addExamToCourse(@PathVariable String courseId) {
+  public ResponseEntity<?> deleteCourse(@PathVariable String courseId) {
     Long id = Long.valueOf(courseId);
     courseRepository.deleteById(id);
 

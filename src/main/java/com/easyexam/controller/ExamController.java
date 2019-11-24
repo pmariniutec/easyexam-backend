@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Optional;
 import javax.validation.Valid;
+import com.easyexam.message.response.SuccessfulCreation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,6 +75,11 @@ public class ExamController {
         // TODO: Search each question solution (if present) and add it
 
         examRepository.save(exam);
-        return ResponseEntity.ok().body("Successfully created exam");
+
+        Field field = ReflectionUtils.findField(Exam.class, "id");
+        ReflectionUtils.makeAccessible(field);
+        Long examId = (Long) ReflectionUtils.getField(field, exam);
+
+        return ResponseEntity.ok().body(new SuccessfulCreation(examId, "Exam"));
   }
 }

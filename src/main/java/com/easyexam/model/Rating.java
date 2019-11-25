@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,7 +31,7 @@ public class Rating {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "question_id", nullable = true)
+	@JoinColumn(name = "question_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Question question;
@@ -38,9 +39,6 @@ public class Rating {
 	@NotBlank
 	@Size(min = 0, max = 250)
 	private String comment;
-
-	public Rating() {
-	}
 
 	public Rating(int score, String comment) {
 		this.score = score;
@@ -71,4 +69,11 @@ public class Rating {
 		this.user = user;
 	}
 
+	public Question getQuestion() {
+		return this.question;
+	}
+
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
 }

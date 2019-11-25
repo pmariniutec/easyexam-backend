@@ -93,10 +93,6 @@ public class ExamController {
 		if (questions.isPresent()) {
 			exam.get().setQuestions(questions.get());
 		}
-		if (keywords.isPresent()) {
-			exam.get().setKeywords(keywords.get());
-		}
-
 		examRepository.save(exam.get());
 
 		return ResponseEntity.ok().body("Successfully updated the exam.");

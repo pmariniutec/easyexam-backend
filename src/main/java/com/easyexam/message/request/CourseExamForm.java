@@ -2,7 +2,7 @@ package com.easyexam.message.request;
 
 import javax.validation.constraints.*;
 
-public class AddExamToCourseForm {
+public class CourseExamForm {
 
 	private Long examId;
 

@@ -9,9 +9,9 @@ Exams API Docs
     ```
     {
         "title": "TITLE",
-        "questions": [{ "content": "CONTENT" }, { "content": "CONTENT" }, ...],
+        "questions": [{"content": "CONTENT" }, {"content": "CONTENT" }, ...],
         "keywords": ["key1", "key2", ...],
-        "courseId" : "ID" // NOT REQUIRED
+        "courseId" : "ID" // OPTIONAL
     }
     ```
 
@@ -37,6 +37,7 @@ Exams API Docs
 			"keywords": [...],
 			"created": "date",
 			"updated": "date",
+            "course": {...}
 		},
 		{
 			"title": "Exam 2",
@@ -44,27 +45,55 @@ Exams API Docs
 			"keywords": [...],
 			"created": "date",
 			"updated": "date",
+            "course" : null
 		},
 	]
 	```
 
-- Update Exam
+- Get User Exams by Id
     ```
-    PATCH /api/exam/{examId}
-    ```
-    Expects:
-    ```
-    {
-        "title": "TITLE", // Optional
-        "questions": [{ "content": "CONTENT" }, { "content": "CONTENT" }, ...], //optional
-        "keywords": ["key1", "key2", ...], //Optional
-        "courseId" : "ID" // NOT REQUIRED //Optional
-    }
+    GET /api/exam/:examId
     ```
 
 	Returns:
 	```
     {
-        "message": "Successfully updated the exam."
+        "created": "2019-11-24T21:26:19.437+0000",
+        "updated": "2019-11-24T21:26:19.511+0000",
+        "id": 5,
+        "title": "TITLE",
+        "questions": [{...}],
+        "solutions": [{...}],
+        "keywords": [
+            "algorithms", ...
+        ],
+        "course": {...}
     }
 	```
+
+- Update Exam
+    ```
+    PATCH /api/exam/:examId
+    ```
+    Expects:
+    ```
+    {
+        "title": "TITLE",
+        "questions": [{ "content": "CONTENT" }, ...],
+        "solutions": [{...}, ...],
+        "keywords": ["KEYWORD", ...]
+    }
+    ```
+	Returns:
+	```
+    Successfully updated the exam."
+	```
+
+- Delete Exam
+    ```
+    DELETE /api/exam/:examId
+    ```
+    Returns:
+    ```
+    Successfully deleted Exam with id: {examId}
+    ```

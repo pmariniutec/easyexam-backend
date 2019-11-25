@@ -1,5 +1,6 @@
 package com.easyexam.message.request;
 
+import java.util.Optional;
 import java.util.Set;
 import javax.validation.constraints.*;
 
@@ -15,59 +16,49 @@ public class UpdateUserForm {
 	@Email
 	private String email;
 
-	private Set<String> role;
-
 	@Size(min = 6, max = 40)
 	private String password;
 
 	private int points;
 
+	public Optional<Integer> getPoints() {
+		return Optional.ofNullable(this.points);
+	}
+
 	public void setPoints(int points) {
 		this.points = points;
 	}
 
-	public int getPoints() {
-		return this.points;
+	public Optional<String> getFirstName() {
+		return Optional.ofNullable(this.firstName);
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setName(String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public Optional<String> getLastName() {
+		return Optional.ofNullable(this.lastName);
 	}
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public String getEmail() {
-		return email;
+	public Optional<String> getEmail() {
+		return Optional.ofNullable(this.email);
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public Optional<String> getPassword() {
+		return Optional.ofNullable(this.password);
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Set<String> getRole() {
-		return this.role;
-	}
-
-	public void setRole(Set<String> role) {
-		this.role = role;
 	}
 
 }

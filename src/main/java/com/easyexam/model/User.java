@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Range;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
@@ -49,6 +50,7 @@ public class User extends TimestampedEntity {
 	private String email;
 
 	@NotBlank
+	@JsonIgnore
 	@Size(min = 6, max = 100)
 	private String password;
 
@@ -90,10 +92,6 @@ public class User extends TimestampedEntity {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getFullName() {
-		return firstName + ' ' + lastName;
 	}
 
 	public String getEmail() {

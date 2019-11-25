@@ -52,6 +52,10 @@ public class Solution extends TimestampedEntity {
 		this.content = content;
 	}
 
+	public Long getId() {
+		return this.id;
+	}
+
 	public String getTitle() {
 		return this.title;
 	}
@@ -74,6 +78,10 @@ public class Solution extends TimestampedEntity {
 
 	public void setQuestion(Question question) {
 		this.question = question;
+	}
+
+	public void removeExam(Exam exam) {
+		this.exams.remove(exam);
 	}
 
 }

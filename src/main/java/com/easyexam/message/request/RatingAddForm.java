@@ -1,6 +1,7 @@
 package com.easyexam.message.request;
 
 import javax.validation.constraints.*;
+import com.easyexam.model.Rating;
 
 public class RatingAddForm {
 

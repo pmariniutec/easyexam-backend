@@ -3,6 +3,7 @@ package com.easyexam.controller;
 import com.easyexam.message.request.CreateQuestionForm;
 import com.easyexam.message.request.RatingAddForm;
 import com.easyexam.model.Question;
+import com.easyexam.model.Rating;
 import com.easyexam.message.response.SuccessfulCreation;
 import com.easyexam.repository.QuestionRepository;
 import com.easyexam.security.jwt.JwtUtils;
@@ -94,7 +95,7 @@ public class QuestionController {
            }
 
            Rating rating = ratingRequest.getRating();
-           quetsion.get().addRating(rating);
+           question.get().addRating(rating);
 
            return ResponseEntity.ok().body("Succesfully added rating");
 
@@ -109,6 +110,8 @@ public class QuestionController {
 		Field field = ReflectionUtils.findField(Question.class, "id");
 		ReflectionUtils.makeAccessible(field);
 		Long questionId = (Long) ReflectionUtils.getField(field, question);
+
+        return ResponseEntity.ok().body(new SuccessfulCreation(questionId, "Question"));
 
 	}
 }

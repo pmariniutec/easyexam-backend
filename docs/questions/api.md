@@ -8,14 +8,17 @@ Questions API Docs
     Expects:
     ```
     {
-        "title": "TITLE",
-		"content": "CONTENT"
+		"content": "CONTENT",
+        "keywords": ["KEY1", "KEY2"] // OPTIONAL
     }
     ```
 
 	Returns:
 	```
-	Success response
+    {
+        "id": ID,
+        "message": "Successfully created Question"
+    }
 	```
 
 - Get Questions
@@ -26,11 +29,15 @@ Questions API Docs
 	Returns:
 	```
 	[{
-		"title": "TITLE",
+        "id": ID,
+        "keywords": ["KEY1", "KEY2", ...],
 		"content": "CONTENT",
 		"created": "date",
 		"updated": "date"
-	},...]
+	},
+    {...},
+    ...
+    ]
 	```
 
 - Get Question by Id
@@ -41,7 +48,8 @@ Questions API Docs
 	Returns:
 	```
 	{
-		"title": "TITLE",
+        "id": ID,
+        "keywords": ["KEY1", "KEY2", ...],
 		"content": "CONTENT",
 		"created": "date",
 		"updated": "date"

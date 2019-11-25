@@ -1,6 +1,7 @@
 package com.easyexam.controller;
 
 import com.easyexam.message.request.CreateExamForm;
+import com.easyexam.message.request.PatchExamForm;
 import com.easyexam.model.Course;
 import com.easyexam.model.Exam;
 import com.easyexam.model.User;
@@ -11,7 +12,6 @@ import com.easyexam.repository.ExamRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
 import com.easyexam.message.response.SuccessfulCreation;
@@ -72,20 +72,32 @@ public class ExamController {
 
 	@PatchMapping("/{examId}")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-	public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields) {
-		Long id = (Long) fields.get("id");
+    public ResponseEntity<?> partialUpdate(@PathVariable String examId, @RequestBody PatchExamForm requestForm) {
+        // TODO: atm questions in patch request will override current
+        // questions and other questions will be left on air.
+        
+        Long id = Long.valueOf(examId);
 		Optional<Exam> exam = examRepository.findById(id);
 
-		if (!exam.isPresent()) {
-			return ResponseEntity.badRequest().body("Cannot find exam by that id");
-		}
+        if (exam.isEmpty()) {
+            return ResponseEntity.badRequest().body("Cannot find exam by that id");
+        }
 
-		fields.forEach((k, v) -> {
-			Field field = ReflectionUtils.findField(Exam.class, k);
-			ReflectionUtils.makeAccessible(field);
-			ReflectionUtils.setField(field, exam.get(), v);
-		});
-		examRepository.saveAndFlush(exam.get());
+        Optional<String> title = requestForm.getTitle();
+        Optional<List<Question>> questions = requestForm.getQuestions();
+        Optional<List<String>> keywords = requestForm.getKeywords();
+
+        if (title.isPresent()) {
+            exam.get().setTitle(title.get());
+        }
+        if (questions.isPresent()) {
+            exam.get().setQuestions(questions.get());
+        }
+        if (keywords.isPresent()) {
+            exam.get().setKeywords(keywords.get());
+        }
+
+        examRepository.save(exam.get());
 
 		return ResponseEntity.ok().body("Successfully updated the exam.");
 

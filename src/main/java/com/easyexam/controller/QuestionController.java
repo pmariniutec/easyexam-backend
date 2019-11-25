@@ -2,6 +2,7 @@ package com.easyexam.controller;
 
 import com.easyexam.message.request.CreateQuestionForm;
 import com.easyexam.model.Question;
+import com.easyexam.message.response.SuccessfulCreation;
 import com.easyexam.repository.QuestionRepository;
 import com.easyexam.security.jwt.JwtUtils;
 import com.easyexam.security.utils.AuthenticationUtils;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.ReflectionUtils;
+import java.lang.reflect.Field;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -36,6 +39,9 @@ public class QuestionController {
 	@GetMapping("")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> getQuestions() {
+        // TODO: maybe one should fetch only the questions present on the exams
+        // of a user. Are private questions a thing?
+
 		String email = authenticationUtils.getAuthenticatedUserEmail();
 
 		Optional<List<Question>> questions = questionRepository.getQuestions();
@@ -54,11 +60,14 @@ public class QuestionController {
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
-		Question question = new Question(createQuestionRequest.getTitle(), createQuestionRequest.getContent(),
+        Question question = new Question(createQuestionRequest.getContent(),
 				createQuestionRequest.getKeywords());
 
-		questionRepository.save(question);
-		return ResponseEntity.ok().body("Successfully created question");
+        Field field = ReflectionUtils.findField(Question.class, "id");
+		ReflectionUtils.makeAccessible(field);
+        Long questionId = (Long) ReflectionUtils.getField(field, question);
+
+        return ResponseEntity.ok().body(new SuccessfulCreation(questionId, "Question"));
 	}
 
 }

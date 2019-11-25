@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "questions")
@@ -22,9 +21,6 @@ public class Question extends TimestampedEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Size(min = 1, max = 200)
-	private String title;
 
 	@NotBlank
 	@Column(columnDefinition = "text")
@@ -40,19 +36,14 @@ public class Question extends TimestampedEntity {
 	public Question() {
 	}
 
-	public Question(String title, String content, List<String> keywords) {
-		this.title = title;
+    public Question(String content, List<String> keywords) {
 		this.content = content;
 		this.keywords = keywords;
 	}
 
-	public String getTitle() {
-		return this.title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public Long getId() {
+        return this.id;
+    }
 
 	public String getContent() {
 		return this.content;

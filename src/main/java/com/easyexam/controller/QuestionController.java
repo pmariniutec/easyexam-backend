@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
@@ -38,14 +39,25 @@ public class QuestionController {
 
 	@GetMapping("")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-	public ResponseEntity<?> getQuestions() {
-		// TODO: maybe one should fetch only the questions present on the exams
-		// of a user. Are private questions a thing?
+	public ResponseEntity<?> getQuestionsByKeywords(@RequestParam(required = false) Optional<List<String>> keywords) {
+		// URL Example: {URL}/api/question?keywords=ada,analisis+algoritmos,os
+		// TODO: define the limit in the env variables or something like that
 
-		String email = authenticationUtils.getAuthenticatedUserEmail();
+		Integer limit = 3;
+		Optional<List<Question>> questions;
 
-		Optional<List<Question>> questions = questionRepository.getQuestions();
-		return ResponseEntity.ok(questions.orElse(List.of()));
+		if (keywords.isPresent()) {
+			if (keywords.get().isEmpty()) {
+				return ResponseEntity.badRequest().body(
+						"Keywords query string array can't be empty. If you want to fetch random queries without considering tags try to use /api/question instead of /api/question&keywords");
+			}
+			questions = questionRepository.getQuestionsByKeywords(keywords.get(), limit);
+		}
+		else {
+			questions = questionRepository.getQuestionsUpTo(limit);
+		}
+
+		return ResponseEntity.ok().body(questions.orElse(List.of()));
 	}
 
 	@GetMapping("/{questionId}")
@@ -61,6 +73,8 @@ public class QuestionController {
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
 		Question question = new Question(createQuestionRequest.getContent(), createQuestionRequest.getKeywords());
+
+		questionRepository.save(question);
 
 		Field field = ReflectionUtils.findField(Question.class, "id");
 		ReflectionUtils.makeAccessible(field);

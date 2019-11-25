@@ -85,7 +85,6 @@ public class ExamController {
 
 		Optional<String> title = requestForm.getTitle();
 		Optional<List<Question>> questions = requestForm.getQuestions();
-		Optional<List<String>> keywords = requestForm.getKeywords();
 
 		if (title.isPresent()) {
 			exam.get().setTitle(title.get());

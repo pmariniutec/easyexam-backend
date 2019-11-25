@@ -10,7 +10,6 @@ Exams API Docs
     {
         "title": "TITLE",
         "questions": [{"content": "CONTENT" }, {"content": "CONTENT" }, ...],
-        "keywords": ["key1", "key2", ...],
         "courseId" : "ID" // OPTIONAL
     }
     ```
@@ -34,7 +33,6 @@ Exams API Docs
 		{
 			"title": "Exam 1",
 			"questions": [...],
-			"keywords": [...],
 			"created": "date",
 			"updated": "date",
             "course": {...}
@@ -42,7 +40,6 @@ Exams API Docs
 		{
 			"title": "Exam 2",
 			"questions": [...],
-			"keywords": [...],
 			"created": "date",
 			"updated": "date",
             "course" : null
@@ -64,9 +61,6 @@ Exams API Docs
         "title": "TITLE",
         "questions": [{...}],
         "solutions": [{...}],
-        "keywords": [
-            "algorithms", ...
-        ],
         "course": {...}
     }
 	```
@@ -81,7 +75,6 @@ Exams API Docs
         "title": "TITLE",
         "questions": [{ "content": "CONTENT" }, ...],
         "solutions": [{...}, ...],
-        "keywords": ["KEYWORD", ...]
     }
     ```
 	Returns:

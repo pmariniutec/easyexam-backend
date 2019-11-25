@@ -45,32 +45,32 @@ public class UserController {
 
 	@PatchMapping("")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> partialUpdate(@Valid @RequestBody UpdateUserForm fields) {
+	public ResponseEntity<?> partialUpdate(@Valid @RequestBody UpdateUserForm fields) {
 		User user = authenticationUtils.getUserObject();
 
-        Optional<String> firstName = fields.getFirstName();
-        Optional<String> lastName = fields.getLastName();
-        Optional<String> email = fields.getEmail();
+		Optional<String> firstName = fields.getFirstName();
+		Optional<String> lastName = fields.getLastName();
+		Optional<String> email = fields.getEmail();
 
-        Optional<String> password = fields.getPassword();
-        Optional<Integer> points = fields.getPoints();
+		Optional<String> password = fields.getPassword();
+		Optional<Integer> points = fields.getPoints();
 
-        if (firstName.isPresent()) {
-            user.setFirstName(firstName.get());
-        }
-        if (lastName.isPresent()) {
-            user.setLastName(lastName.get());
-        }
-        if (email.isPresent()) {
-            user.setEmail(email.get());
-        }
-        if (password.isPresent()) {
-            user.setPassword(encoder.encode(password.get()));
-        }
-        if (points.isPresent()) {
-            user.setPoints(points.get());
-        }
-        
+		if (firstName.isPresent()) {
+			user.setFirstName(firstName.get());
+		}
+		if (lastName.isPresent()) {
+			user.setLastName(lastName.get());
+		}
+		if (email.isPresent()) {
+			user.setEmail(email.get());
+		}
+		if (password.isPresent()) {
+			user.setPassword(encoder.encode(password.get()));
+		}
+		if (points.isPresent()) {
+			user.setPoints(points.get());
+		}
+
 		userRepository.save(user);
 
 		return ResponseEntity.ok().body("Successfully updated the user.");

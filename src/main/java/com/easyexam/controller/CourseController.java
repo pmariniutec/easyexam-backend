@@ -58,26 +58,26 @@ public class CourseController {
 
 	@GetMapping("/{courseId}")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> getCourse(@PathVariable String courseId) {
+	public ResponseEntity<?> getCourse(@PathVariable String courseId) {
 		Long id = Long.valueOf(courseId);
 
 		Optional<Course> course = courseRepository.findById(id);
 		return ResponseEntity.ok(course.orElse(null));
 	}
 
-    @GetMapping("/{courseId}/exams")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> getCourseExams(@PathVariable String courseId) {
-        Long id = Long.valueOf(courseId);
-        Optional<Course> course = courseRepository.findById(id);
+	@GetMapping("/{courseId}/exams")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getCourseExams(@PathVariable String courseId) {
+		Long id = Long.valueOf(courseId);
+		Optional<Course> course = courseRepository.findById(id);
 
-        if (course.isEmpty()) {
-            return ResponseEntity.badRequest().body("Course not found");
-        }
-            
-        Optional<Set<Exam>> exams = Optional.of(course.get()._getExams());
-        return ResponseEntity.ok(exams.orElse(Set.of()));
-    }
+		if (course.isEmpty()) {
+			return ResponseEntity.badRequest().body("Course not found");
+		}
+
+		Optional<Set<Exam>> exams = Optional.of(course.get()._getExams());
+		return ResponseEntity.ok(exams.orElse(Set.of()));
+	}
 
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
@@ -90,80 +90,77 @@ public class CourseController {
 
 		courseRepository.save(course);
 
-        Field field = ReflectionUtils.findField(Course.class, "id");
+		Field field = ReflectionUtils.findField(Course.class, "id");
 		ReflectionUtils.makeAccessible(field);
-        Long courseId = (Long) ReflectionUtils.getField(field, course);
+		Long courseId = (Long) ReflectionUtils.getField(field, course);
 
-        return ResponseEntity.ok().body(new SuccessfulCreation(courseId, "Course"));
+		return ResponseEntity.ok().body(new SuccessfulCreation(courseId, "Course"));
 	}
 
-    @PostMapping("/exam/attach")
+	@PostMapping("/exam/attach")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> attachExamToCourse(@Valid @RequestBody CourseExamForm attachExamRequest) {
-        Long examId = attachExamRequest.getExamId();
-        Long courseId = attachExamRequest.getCourseId();
+	public ResponseEntity<?> attachExamToCourse(@Valid @RequestBody CourseExamForm attachExamRequest) {
+		Long examId = attachExamRequest.getExamId();
+		Long courseId = attachExamRequest.getCourseId();
 
-        Optional<Course> course = courseRepository.findById(courseId);
-        Optional<Exam> exam = examRepository.findById(examId);
+		Optional<Course> course = courseRepository.findById(courseId);
+		Optional<Exam> exam = examRepository.findById(examId);
 
-        if (exam.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("Cannot find an exam with id: " + examId.toString());
-        }
-        if (course.isEmpty()) {
-            return ResponseEntity.badRequest().body("Cannot find a course with id: " + courseId.toString());
-        }
+		if (exam.isEmpty()) {
+			return ResponseEntity.badRequest().body("Cannot find an exam with id: " + examId.toString());
+		}
+		if (course.isEmpty()) {
+			return ResponseEntity.badRequest().body("Cannot find a course with id: " + courseId.toString());
+		}
 
-        course.get().addExam(exam.get());
+		course.get().addExam(exam.get());
 
-        courseRepository.save(course.get());
-        return ResponseEntity.ok().body("Successfully attach exam with id " + examId.toString()
-                + " from course with id " + courseId.toString());
-    }
-    
-    @PostMapping("/exam/detach")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> detachExamFromCourse(@Valid @RequestBody CourseExamForm detachExamRequest) {
-        Long examId = detachExamRequest.getExamId();
-        Long courseId = detachExamRequest.getCourseId();
+		courseRepository.save(course.get());
+		return ResponseEntity.ok().body("Successfully attach exam with id " + examId.toString()
+				+ " from course with id " + courseId.toString());
+	}
 
-        Optional<Course> course = courseRepository.findById(courseId);
-        Optional<Exam> exam = examRepository.findById(examId);
+	@PostMapping("/exam/detach")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> detachExamFromCourse(@Valid @RequestBody CourseExamForm detachExamRequest) {
+		Long examId = detachExamRequest.getExamId();
+		Long courseId = detachExamRequest.getCourseId();
 
-        if (exam.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("Cannot find an exam with id: " + examId.toString());
-        }
-        if (course.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("Cannot find a course with id: " + courseId.toString());
-        }
+		Optional<Course> course = courseRepository.findById(courseId);
+		Optional<Exam> exam = examRepository.findById(examId);
 
-        course.get().removeExam(exam.get());
-        exam.get().removeCourse(course.get());
+		if (exam.isEmpty()) {
+			return ResponseEntity.badRequest().body("Cannot find an exam with id: " + examId.toString());
+		}
+		if (course.isEmpty()) {
+			return ResponseEntity.badRequest().body("Cannot find a course with id: " + courseId.toString());
+		}
 
-        return ResponseEntity.ok().body("Successfully detached exam with id " + examId.toString()
-                + " from course with id " + courseId.toString());
-    }
+		course.get().removeExam(exam.get());
+		exam.get().removeCourse(course.get());
+
+		return ResponseEntity.ok().body("Successfully detached exam with id " + examId.toString()
+				+ " from course with id " + courseId.toString());
+	}
 
 	@DeleteMapping("/{courseId}")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> deleteCourse(@PathVariable String courseId) {
-        Long id = Long.valueOf(courseId);
-        Optional<Course> course = courseRepository.findById(id);
-        if (!course.isPresent()) {
-            return ResponseEntity.badRequest().body("Cannot find course by id: " + courseId);
-        }
+	public ResponseEntity<?> deleteCourse(@PathVariable String courseId) {
+		Long id = Long.valueOf(courseId);
+		Optional<Course> course = courseRepository.findById(id);
+		if (!course.isPresent()) {
+			return ResponseEntity.badRequest().body("Cannot find course by id: " + courseId);
+		}
 
-        Set<Exam> exams = course.get()._getExams();
+		Set<Exam> exams = course.get()._getExams();
 
-        for (Exam exam : exams) {
-            exam.setCourse(null);
-        }
+		for (Exam exam : exams) {
+			exam.setCourse(null);
+		}
 
-        courseRepository.delete(course.get());
+		courseRepository.delete(course.get());
 
-        return ResponseEntity.ok().body("Deleted course with id " + courseId);
-    }
+		return ResponseEntity.ok().body("Deleted course with id " + courseId);
+	}
 
 }

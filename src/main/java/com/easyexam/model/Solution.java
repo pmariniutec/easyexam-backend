@@ -52,9 +52,9 @@ public class Solution extends TimestampedEntity {
 		this.content = content;
 	}
 
-    public Long getId() {
-        return this.id;
-    }
+	public Long getId() {
+		return this.id;
+	}
 
 	public String getTitle() {
 		return this.title;

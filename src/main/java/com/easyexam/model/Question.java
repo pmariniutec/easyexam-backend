@@ -36,14 +36,14 @@ public class Question extends TimestampedEntity {
 	public Question() {
 	}
 
-    public Question(String content, List<String> keywords) {
+	public Question(String content, List<String> keywords) {
 		this.content = content;
 		this.keywords = keywords;
 	}
 
-    public Long getId() {
-        return this.id;
-    }
+	public Long getId() {
+		return this.id;
+	}
 
 	public String getContent() {
 		return this.content;

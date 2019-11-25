@@ -74,23 +74,23 @@ public class Course extends TimestampedEntity {
 	public void setCode(String code) {
 		this.code = code;
 	}
-    
-    public Set<Exam> _getExams() {
-        return this.exams;
-    }
 
-    public void setExams(Set<Exam> exams) {
+	public Set<Exam> _getExams() {
+		return this.exams;
+	}
+
+	public void setExams(Set<Exam> exams) {
 		this.exams = exams;
 	}
 
-    public void addExam(Exam exam) {
+	public void addExam(Exam exam) {
 		this.exams.add(exam);
-        exam.setCourse(this);
+		exam.setCourse(this);
 	}
 
-    public void removeExam(Exam exam) {
-        this.exams.remove(exam);
-    }
+	public void removeExam(Exam exam) {
+		this.exams.remove(exam);
+	}
 
 	public User getUser() {
 		return this.user;

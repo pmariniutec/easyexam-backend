@@ -39,8 +39,8 @@ public class QuestionController {
 	@GetMapping("")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> getQuestions() {
-        // TODO: maybe one should fetch only the questions present on the exams
-        // of a user. Are private questions a thing?
+		// TODO: maybe one should fetch only the questions present on the exams
+		// of a user. Are private questions a thing?
 
 		String email = authenticationUtils.getAuthenticatedUserEmail();
 
@@ -60,14 +60,13 @@ public class QuestionController {
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
-        Question question = new Question(createQuestionRequest.getContent(),
-				createQuestionRequest.getKeywords());
+		Question question = new Question(createQuestionRequest.getContent(), createQuestionRequest.getKeywords());
 
-        Field field = ReflectionUtils.findField(Question.class, "id");
+		Field field = ReflectionUtils.findField(Question.class, "id");
 		ReflectionUtils.makeAccessible(field);
-        Long questionId = (Long) ReflectionUtils.getField(field, question);
+		Long questionId = (Long) ReflectionUtils.getField(field, question);
 
-        return ResponseEntity.ok().body(new SuccessfulCreation(questionId, "Question"));
+		return ResponseEntity.ok().body(new SuccessfulCreation(questionId, "Question"));
 	}
 
 }

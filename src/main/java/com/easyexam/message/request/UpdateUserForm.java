@@ -19,9 +19,9 @@ public class UpdateUserForm {
 	@Size(min = 6, max = 40)
 	private String password;
 
-    private int points;
+	private int points;
 
-    public Optional<Integer> getPoints() {
+	public Optional<Integer> getPoints() {
 		return Optional.ofNullable(this.points);
 	}
 
@@ -29,35 +29,36 @@ public class UpdateUserForm {
 		this.points = points;
 	}
 
-    public Optional<String> getFirstName() {
-        return Optional.ofNullable(this.firstName);
-    }
+	public Optional<String> getFirstName() {
+		return Optional.ofNullable(this.firstName);
+	}
 
-    public void setFirstName(String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-    public Optional<String> getLastName() {
-        return Optional.ofNullable(this.lastName);
-    }
+	public Optional<String> getLastName() {
+		return Optional.ofNullable(this.lastName);
+	}
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-    public Optional<String> getEmail() {
-        return Optional.ofNullable(this.email);
-    }
+	public Optional<String> getEmail() {
+		return Optional.ofNullable(this.email);
+	}
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-    public Optional<String> getPassword() {
-        return Optional.ofNullable(this.password);
-    }
+	public Optional<String> getPassword() {
+		return Optional.ofNullable(this.password);
+	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 }

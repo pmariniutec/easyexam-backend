@@ -31,7 +31,7 @@ public class Exam extends TimestampedEntity {
 	private String title;
 
 	@ManyToOne
-    @JsonIgnore
+	@JsonIgnore
 	private User user;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
@@ -92,7 +92,7 @@ public class Exam extends TimestampedEntity {
 		this.user = user;
 	}
 
-    public User getUser() {
+	public User getUser() {
 		return this.user;
 	}
 
@@ -104,8 +104,8 @@ public class Exam extends TimestampedEntity {
 		this.course = course;
 	}
 
-    public void removeCourse(Course course) {
-        this.course = null;
+	public void removeCourse(Course course) {
+		this.course = null;
 	}
 
 }

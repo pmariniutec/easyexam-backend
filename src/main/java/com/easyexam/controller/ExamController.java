@@ -72,32 +72,32 @@ public class ExamController {
 
 	@PatchMapping("/{examId}")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> partialUpdate(@PathVariable String examId, @RequestBody PatchExamForm requestForm) {
-        // TODO: atm questions in patch request will override current
-        // questions and other questions will be left on air.
-        
-        Long id = Long.valueOf(examId);
+	public ResponseEntity<?> partialUpdate(@PathVariable String examId, @RequestBody PatchExamForm requestForm) {
+		// TODO: atm questions in patch request will override current
+		// questions and other questions will be left on air.
+
+		Long id = Long.valueOf(examId);
 		Optional<Exam> exam = examRepository.findById(id);
 
-        if (exam.isEmpty()) {
-            return ResponseEntity.badRequest().body("Cannot find exam by that id");
-        }
+		if (exam.isEmpty()) {
+			return ResponseEntity.badRequest().body("Cannot find exam by that id");
+		}
 
-        Optional<String> title = requestForm.getTitle();
-        Optional<List<Question>> questions = requestForm.getQuestions();
-        Optional<List<String>> keywords = requestForm.getKeywords();
+		Optional<String> title = requestForm.getTitle();
+		Optional<List<Question>> questions = requestForm.getQuestions();
+		Optional<List<String>> keywords = requestForm.getKeywords();
 
-        if (title.isPresent()) {
-            exam.get().setTitle(title.get());
-        }
-        if (questions.isPresent()) {
-            exam.get().setQuestions(questions.get());
-        }
-        if (keywords.isPresent()) {
-            exam.get().setKeywords(keywords.get());
-        }
+		if (title.isPresent()) {
+			exam.get().setTitle(title.get());
+		}
+		if (questions.isPresent()) {
+			exam.get().setQuestions(questions.get());
+		}
+		if (keywords.isPresent()) {
+			exam.get().setKeywords(keywords.get());
+		}
 
-        examRepository.save(exam.get());
+		examRepository.save(exam.get());
 
 		return ResponseEntity.ok().body("Successfully updated the exam.");
 

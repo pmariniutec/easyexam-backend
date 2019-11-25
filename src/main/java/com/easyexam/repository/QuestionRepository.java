@@ -16,8 +16,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 	@Query(value = "SELECT * FROM questions ORDER BY RANDOM() LIMIT :n", nativeQuery = true)
 	Optional<List<Question>> getQuestionsUpTo(@Param("n") Integer limit);
 
-	@Query(value = "SELECT question_id as id, content, created, updated FROM questions NATURAL JOIN (SELECT * FROM keywords K WHERE K.keywords IN :selected_keywords ) as K ORDER BY RANDOM() LIMIT :n",
-			nativeQuery = true)
+    @Query(value = "SELECT id, content, created, updated FROM questions NATURAL JOIN (SELECT question_id AS id FROM keywords K WHERE K.keywords IN :selected_keywords ) AS K ORDER BY RANDOM() LIMIT :n", nativeQuery = true)
 	Optional<List<Question>> getQuestionsByKeywords(@Param("selected_keywords") List<String> keywords,
 			@Param("n") Integer limit);
 

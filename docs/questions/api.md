@@ -55,3 +55,26 @@ Questions API Docs
 		"updated": "date"
 	}
 	```
+- Get Question ratings by Id
+    ```
+    GET /api/question/{questionId}/rating
+    ```
+
+	Returns:
+	```
+	{
+        [
+            {"score": <score>, "comment": <comment> }
+        ]
+	}
+	```
+- Add rating to question
+    ```
+    POST /api/question/{questionId}/rating
+    ```
+    Expects:
+    ```
+    {
+		"rating": {"score": <score>, "comment": <comment>}
+    }
+    ```

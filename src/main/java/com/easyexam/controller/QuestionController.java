@@ -1,6 +1,7 @@
 package com.easyexam.controller;
 
 import com.easyexam.message.request.CreateQuestionForm;
+import com.easyexam.message.request.RatingAddForm;
 import com.easyexam.model.Question;
 import com.easyexam.message.response.SuccessfulCreation;
 import com.easyexam.repository.QuestionRepository;
@@ -69,6 +70,35 @@ public class QuestionController {
 		return ResponseEntity.ok(question.orElse(null));
 	}
 
+	@GetMapping("/{questionId}/rating")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getQuestionRatings(@PathVariable String questionId) {
+		Long id = Long.valueOf(questionId);
+		Optional<Question> question = questionRepository.findById(id);
+
+        if(!question.isPresent()){
+           return ResponseEntity.badRequest().body("Cannot find question by that id");
+        }
+
+		return ResponseEntity.ok(question.get().getRatings());
+	}
+
+    @PostMapping("/{questionId}/rating")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+    public ResponseEntity<?> addRating(@PathVariable String questionId, @Valid @RequestBody RatingAddForm ratingRequest){
+           Long id = Long.valueOf(questionId);
+           Optional<Question> question = questionRepository.findById(id);
+            
+           if(!question.isPresent()){
+               return ResponseEntity.badRequest().body("Cannot find question by that id");
+           }
+
+           Rating rating = ratingRequest.getRating();
+           quetsion.get().addRating(rating);
+
+           return ResponseEntity.ok().body("Succesfully added rating");
+
+    }
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
@@ -80,7 +110,5 @@ public class QuestionController {
 		ReflectionUtils.makeAccessible(field);
 		Long questionId = (Long) ReflectionUtils.getField(field, question);
 
-		return ResponseEntity.ok().body(new SuccessfulCreation(questionId, "Question"));
 	}
-
 }

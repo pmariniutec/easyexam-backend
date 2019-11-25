@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.OneToMany;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -21,6 +22,9 @@ public class Question extends TimestampedEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+    @OneToMany(mappedBy = "question")
+    private List<Rating> ratings;
 
 	@NotBlank
 	@Column(columnDefinition = "text")
@@ -64,5 +68,12 @@ public class Question extends TimestampedEntity {
 	public void removeExam(Exam exam) {
 		this.exams.remove(exam);
 	}
+    public List<Rating> getRatings(){
+        return this.ratings;
+    }
+
+    public void addRating(Rating rate){
+        this.ratings.add(rate);
+    }
 
 }

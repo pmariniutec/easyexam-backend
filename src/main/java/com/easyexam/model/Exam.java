@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.persistence.CascadeType;
 import org.hibernate.validator.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "exams")
@@ -32,6 +33,7 @@ public class Exam extends TimestampedEntity {
 	private String title;
 
 	@ManyToOne
+    @JsonIgnore
 	private User user;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
@@ -105,7 +107,7 @@ public class Exam extends TimestampedEntity {
 		this.user = user;
 	}
 
-	public User getUser() {
+    public User getUser() {
 		return this.user;
 	}
 

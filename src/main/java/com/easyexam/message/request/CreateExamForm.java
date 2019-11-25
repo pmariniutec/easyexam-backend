@@ -9,12 +9,9 @@ import java.util.Optional;
 import com.easyexam.repository.QuestionRepository;
 import java.util.List;
 import javax.validation.constraints.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CreateExamForm {
 
-	private static final Logger log = LoggerFactory.getLogger(CreateExamForm.class);
 
 	@NotBlank
 	@Size(min = 1, max = 200)

@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import javax.validation.Valid;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 
@@ -42,18 +45,32 @@ public class UserController {
 
 	@PatchMapping("")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-	public ResponseEntity<?> partialUpdate(@RequestBody Map<String, Object> fields) {
+    public ResponseEntity<?> partialUpdate(@Valid @RequestBody UpdateUserForm fields) {
 		User user = authenticationUtils.getUserObject();
 
-		fields.forEach((k, v) -> {
+        Optional<String> firstName = fields.getFirstName();
+        Optional<String> lastName = fields.getLastName();
+        Optional<String> email = fields.getEmail();
 
-			if (k.equals("password")) {
-				v = encoder.encode(v.toString());
-			}
-			Field field = ReflectionUtils.findField(User.class, k);
-			ReflectionUtils.makeAccessible(field);
-			ReflectionUtils.setField(field, user, v);
-		});
+        Optional<String> password = fields.getPassword();
+        Optional<Integer> points = fields.getPoints();
+
+        if (firstName.isPresent()) {
+            user.setFirstName(firstName.get());
+        }
+        if (lastName.isPresent()) {
+            user.setLastName(lastName.get());
+        }
+        if (email.isPresent()) {
+            user.setEmail(email.get());
+        }
+        if (password.isPresent()) {
+            user.setPassword(encoder.encode(password.get()));
+        }
+        if (points.isPresent()) {
+            user.setPoints(points.get());
+        }
+        
 		userRepository.save(user);
 
 		return ResponseEntity.ok().body("Successfully updated the user.");

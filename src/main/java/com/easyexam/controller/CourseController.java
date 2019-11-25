@@ -3,6 +3,7 @@ package com.easyexam.controller;
 import com.easyexam.message.request.CourseExamForm;
 import com.easyexam.message.request.CreateCourseForm;
 import com.easyexam.model.Course;
+import com.easyexam.message.response.SuccessfulCreation;
 import com.easyexam.model.Exam;
 import com.easyexam.model.User;
 import com.easyexam.repository.CourseRepository;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Optional;
 import javax.validation.Valid;
+import org.springframework.util.ReflectionUtils;
+import java.lang.reflect.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,7 +71,7 @@ public class CourseController {
         Long id = Long.valueOf(courseId);
         Optional<Course> course = courseRepository.findById(id);
 
-        if (!course.isPresent()) {
+        if (course.isEmpty()) {
             return ResponseEntity.badRequest().body("Course not found");
         }
             
@@ -86,28 +89,36 @@ public class CourseController {
 		course.setUser(user);
 
 		courseRepository.save(course);
-		return ResponseEntity.ok().body("Successfully created course");
+
+        Field field = ReflectionUtils.findField(Course.class, "id");
+		ReflectionUtils.makeAccessible(field);
+        Long courseId = (Long) ReflectionUtils.getField(field, course);
+
+        return ResponseEntity.ok().body(new SuccessfulCreation(courseId, "Course"));
 	}
 
     @PostMapping("/exam/attach")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> addExamToCourse(@Valid @RequestBody CourseExamForm addExamRequest) {
-        Optional<Course> course = courseRepository.findById(addExamRequest.getCourseId());
-        Optional<Exam> exam = examRepository.findById(addExamRequest.getExamId());
+    public ResponseEntity<?> attachExamToCourse(@Valid @RequestBody CourseExamForm attachExamRequest) {
+        Long examId = attachExamRequest.getExamId();
+        Long courseId = attachExamRequest.getCourseId();
+
+        Optional<Course> course = courseRepository.findById(courseId);
+        Optional<Exam> exam = examRepository.findById(examId);
 
         if (exam.isEmpty()) {
             return ResponseEntity.badRequest()
-                    .body("Cannot find an exam with id: " + addExamRequest.getExamId().toString());
+                    .body("Cannot find an exam with id: " + examId.toString());
         }
         if (course.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("Cannot find a course with id: " + addExamRequest.getCourseId().toString());
+            return ResponseEntity.badRequest().body("Cannot find a course with id: " + courseId.toString());
         }
 
         course.get().addExam(exam.get());
 
         courseRepository.save(course.get());
-        return ResponseEntity.ok().body("Successfully added exam to course");
+        return ResponseEntity.ok().body("Successfully attach exam with id " + examId.toString()
+                + " from course with id " + courseId.toString());
     }
     
     @PostMapping("/exam/detach")

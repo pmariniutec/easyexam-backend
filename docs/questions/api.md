@@ -15,7 +15,10 @@ Questions API Docs
 
 	Returns:
 	```
-	Success response
+    {
+        "id": ID,
+        "message": "Successfully created Question"
+    }
 	```
 
 - Get Questions
@@ -26,11 +29,15 @@ Questions API Docs
 	Returns:
 	```
 	[{
-		"title": "TITLE",
+        "id": ID,
+        title": "TITLE",
 		"content": "CONTENT",
 		"created": "date",
 		"updated": "date"
-	},...]
+	},
+    {...},
+    ...
+    ]
 	```
 
 - Get Question by Id
@@ -41,6 +48,7 @@ Questions API Docs
 	Returns:
 	```
 	{
+        "id": ID,
 		"title": "TITLE",
 		"content": "CONTENT",
 		"created": "date",

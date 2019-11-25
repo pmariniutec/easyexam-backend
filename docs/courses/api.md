@@ -10,18 +10,18 @@ Courses API Docs
     {
         "name": "NAME",
 		"code": "CODE",
-		"exams": []			// NOT REQUIRED
+		"exams": [{...}]			// OPTIONAL
     }
     ```
 
 	Returns:
 	```
-	Success response
+    Successfully created course
 	```
 
-- Add Exam to Course
+- Attach Exam to Course
     ```
-    POST /api/course/exam/add
+    POST /api/course/exam/attach
     ```
     Expects:
     ```
@@ -33,7 +33,24 @@ Courses API Docs
 
 	Returns:
 	```
-	Success response
+    Successfully attached exam with id {examId} from course with id {courseId}
+	```
+
+- Detach Exam to Course
+    ```
+    POST /api/course/exam/detach
+    ```
+    Expects:
+    ```
+    {
+        "courseId": "ID",
+		"examId": "ID"
+    }
+    ```
+
+	Returns:
+	```
+    Successfully detached exam with id {examId} from course with id {courseId}
 	```
 
 - Get Courses for User
@@ -48,7 +65,6 @@ Courses API Docs
 			"id": "id",
 			"name": "Course 1",
 			"code": "TESTCOURSE1",
-			"exams": []
 			"created": "date",
 			"updated": "date",
 		},
@@ -56,7 +72,6 @@ Courses API Docs
 			"id": "id",
 			"name": "Course 2",
 			"code": "TESTCOURSE2",
-			"exams": []
 			"created": "date",
 			"updated": "date",
 		}
@@ -74,18 +89,29 @@ Courses API Docs
         "id": "id",
         "name": "Course 1",
         "code": "TESTCOURSE1",
-        "exams": []
         "created": "date",
         "updated": "date",
     }
 	```
 
-- Delete Course
+- Get Exams from Course
     ```
-    DELETE /api/course/<id>
+    GET /api/course/:id/exams
+    ```
+    Returns (a list of exam objects):
+    ```
+    [
+        {...},
+        {...}
+    ]
     ```
 
+
+- Delete Course
+    ```
+    DELETE /api/course/:id
+    ```
 	Returns:
 	```
-	Deleted course <course_name>
+	Deleted course with id <course_id>
 	```

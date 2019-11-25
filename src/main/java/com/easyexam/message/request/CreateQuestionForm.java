@@ -12,7 +12,6 @@ public class CreateQuestionForm {
 
 	private List<String> keywords = new ArrayList<String>();
 
-    
 	public String getContent() {
 		return this.content;
 	}

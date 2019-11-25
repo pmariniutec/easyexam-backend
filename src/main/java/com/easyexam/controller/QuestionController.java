@@ -37,9 +37,9 @@ public class QuestionController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-    @GetMapping("")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> getQuestionsByKeywords(@RequestParam(required = false) Optional<List<String>> keywords) {
+	@GetMapping("")
+	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
+	public ResponseEntity<?> getQuestionsByKeywords(@RequestParam(required = false) Optional<List<String>> keywords) {
 		// URL Example: {URL}/api/question?keywords=ada,analisis+algoritmos,os
 		// TODO: define the limit in the env variables or something like that
 
@@ -51,14 +51,14 @@ public class QuestionController {
 				return ResponseEntity.badRequest().body(
 						"Keywords query string array can't be empty. If you want to fetch random queries without considering tags try to use /api/question instead of /api/question&keywords");
 			}
-			questions =  questionRepository.getQuestionsByKeywords(keywords.get(), limit);
+			questions = questionRepository.getQuestionsByKeywords(keywords.get(), limit);
 		}
 		else {
 			questions = questionRepository.getQuestionsUpTo(limit);
 		}
 
 		return ResponseEntity.ok().body(questions.orElse(List.of()));
-    }
+	}
 
 	@GetMapping("/{questionId}")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
@@ -69,15 +69,14 @@ public class QuestionController {
 		return ResponseEntity.ok(question.orElse(null));
 	}
 
-
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
 		Question question = new Question(createQuestionRequest.getContent(), createQuestionRequest.getKeywords());
 
-        questionRepository.save(question);
+		questionRepository.save(question);
 
-        Field field = ReflectionUtils.findField(Question.class, "id");
+		Field field = ReflectionUtils.findField(Question.class, "id");
 		ReflectionUtils.makeAccessible(field);
 		Long questionId = (Long) ReflectionUtils.getField(field, question);
 

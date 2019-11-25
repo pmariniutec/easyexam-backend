@@ -4,6 +4,7 @@ import com.easyexam.message.request.CreateQuestionForm;
 import com.easyexam.message.request.RatingAddForm;
 import com.easyexam.model.Question;
 import com.easyexam.model.Rating;
+import com.easyexam.message.response.RequestMessages;
 import com.easyexam.message.response.SuccessfulCreation;
 import com.easyexam.repository.QuestionRepository;
 import com.easyexam.security.jwt.JwtUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -50,8 +52,7 @@ public class QuestionController {
 
 		if (keywords.isPresent()) {
 			if (keywords.get().isEmpty()) {
-				return ResponseEntity.badRequest().body(
-						"Keywords query string array can't be empty. If you want to fetch random queries without considering tags try to use /api/question instead of /api/question&keywords");
+				return ResponseEntity.badRequest().body(RequestMessages.QUESTION_KEYWORD_EMPTY);
 			}
 			questions = questionRepository.getQuestionsByKeywords(keywords.get(), limit);
 		}
@@ -68,20 +69,10 @@ public class QuestionController {
 		Long id = Long.valueOf(questionId);
 
 		Optional<Question> question = questionRepository.findById(id);
-		return ResponseEntity.ok(question.orElse(null));
-	}
-
-	@GetMapping("/{questionId}/rating")
-	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
-	public ResponseEntity<?> getQuestionRatings(@PathVariable String questionId) {
-		Long id = Long.valueOf(questionId);
-		Optional<Question> question = questionRepository.findById(id);
-
         if(!question.isPresent()){
-           return ResponseEntity.badRequest().body("Cannot find question by that id");
+            return ResponseEntity.badRequest().body(RequestMessages.QUESTION_NOT_FOUND);
         }
-
-		return ResponseEntity.ok(question.get().getRatings());
+		return ResponseEntity.ok(question.get());
 	}
 
     @PostMapping("/{questionId}/rating")
@@ -91,15 +82,15 @@ public class QuestionController {
            Optional<Question> question = questionRepository.findById(id);
             
            if(!question.isPresent()){
-               return ResponseEntity.badRequest().body("Cannot find question by that id");
+               return ResponseEntity.badRequest().body(RequestMessages.QUESTION_NOT_FOUND);
            }
 
            Rating rating = ratingRequest.getRating();
            question.get().addRating(rating);
 
-           return ResponseEntity.ok().body("Succesfully added rating");
-
+           return ResponseEntity.ok().body(RequestMessages.QUESTION_ADD_RATING_SUCCESS);
     }
+
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {

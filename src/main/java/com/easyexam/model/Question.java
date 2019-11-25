@@ -33,7 +33,7 @@ public class Question extends TimestampedEntity {
 	@ManyToMany(mappedBy = "questions")
 	private List<Exam> exams = new ArrayList<Exam>();
 
-  @ElementCollection
+	@ElementCollection
 	@CollectionTable(name = "keywords")
 	private List<String> keywords = new ArrayList<String>();
 
@@ -43,7 +43,7 @@ public class Question extends TimestampedEntity {
 	public Question(String title, String content, List<String> keywords) {
 		this.title = title;
 		this.content = content;
-    this.keywords = keywords;
+		this.keywords = keywords;
 	}
 
 	public String getTitle() {
@@ -62,7 +62,7 @@ public class Question extends TimestampedEntity {
 		this.content = content;
 	}
 
-  public List<String> getKeywords() {
+	public List<String> getKeywords() {
 		return this.keywords;
 	}
 

@@ -95,10 +95,7 @@ public class ExamController {
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
 
-		Exam exam = new Exam(
-      createExamRequest.getTitle(), 
-      createExamRequest.getQuestions()
-    );
+		Exam exam = new Exam(createExamRequest.getTitle(), createExamRequest.getQuestions());
 
 		User user = authenticationUtils.getUserObject();
 		exam.setUser(user);

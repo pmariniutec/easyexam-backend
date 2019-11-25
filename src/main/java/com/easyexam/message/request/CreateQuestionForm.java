@@ -14,7 +14,7 @@ public class CreateQuestionForm {
 	@NotBlank
 	private String content;
 
-  private List<String> keywords = new ArrayList<String>();
+	private List<String> keywords = new ArrayList<String>();
 
 	public String getTitle() {
 		return this.title;
@@ -32,7 +32,7 @@ public class CreateQuestionForm {
 		this.content = content;
 	}
 
-  public List<String> getKeywords() {
+	public List<String> getKeywords() {
 		return this.keywords;
 	}
 

@@ -54,11 +54,8 @@ public class QuestionController {
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createQuestion(@Valid @RequestBody CreateQuestionForm createQuestionRequest) {
-		Question question = new Question(
-      createQuestionRequest.getTitle(),
-      createQuestionRequest.getContent(),
-      createQuestionRequest.getKeywords()
-    );
+		Question question = new Question(createQuestionRequest.getTitle(), createQuestionRequest.getContent(),
+				createQuestionRequest.getKeywords());
 
 		questionRepository.save(question);
 		return ResponseEntity.ok().body("Successfully created question");

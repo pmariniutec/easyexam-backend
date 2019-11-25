@@ -41,7 +41,7 @@ public class Exam extends TimestampedEntity {
 	@JoinTable(name = "exam_solutions", joinColumns = @JoinColumn(name = "exam_id"),
 			inverseJoinColumns = @JoinColumn(name = "solution_id"))
 	private List<Solution> solutions = new ArrayList<Solution>();
-  	
+
 	@ManyToOne
 	@JoinColumn(name = "course_id")
 	private Course course;
@@ -84,7 +84,7 @@ public class Exam extends TimestampedEntity {
 
 	public void setSolutions(List<Solution> solutions) {
 		this.solutions = solutions;
-	}	
+	}
 
 	public void setUser(User user) {
 		this.user = user;

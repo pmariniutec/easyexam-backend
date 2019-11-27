@@ -38,8 +38,8 @@ public class CompileExamForm {
         this.questions = questions;
     }
 
-	public Long getCourseId() {
-		return this.courseId;
+    public Optional<Long> getCourseId() {
+        return Optional.ofNullable(this.courseId);
 	}
 
 	public void setCourseId(Long courseId) {

@@ -93,7 +93,12 @@ public class LatexCompilerController {
         String title = form.getTitle();
         List<Question> questions = form.getQuestions();
         String newLine = System.getProperty("line.separator");
-        Optional<Course> course = courseRepository.findById(form.getCourseId());
+        Optional<Course> course = Optional.empty();
+
+        if (form.getCourseId().isPresent()) {
+            course = courseRepository.findById(form.getCourseId().get());
+        }
+
         User user = authenticationUtils.getUserObject();
 
         String latexString = String.join(newLine,

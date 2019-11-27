@@ -50,3 +50,5 @@ nbdist/
 ssh-ec2
 
 .vim
+
+tex/files/*

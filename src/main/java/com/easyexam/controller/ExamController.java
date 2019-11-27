@@ -157,7 +157,7 @@ public class ExamController {
 			return ResponseEntity.badRequest().body("Cannot find exam by that id");
 		}
 
-		Optional<Course> course = Optional.of(exam.get().getCourse());
+        Optional<Course> course = Optional.ofNullable(exam.get().getCourse());
 		if (course.isPresent()) {
 			course.get().removeExam(exam.get());
 		}

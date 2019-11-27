@@ -1,36 +1,41 @@
 package com.easyexam.controller;
 
-import com.easyexam.message.request.CreateExamForm;
-import com.easyexam.message.request.PatchExamForm;
-import com.easyexam.model.Course;
-import com.easyexam.model.Exam;
-import com.easyexam.model.User;
-import com.easyexam.model.Question;
-import com.easyexam.model.Solution;
-import com.easyexam.repository.CourseRepository;
-import com.easyexam.repository.ExamRepository;
-import com.easyexam.security.jwt.JwtUtils;
-import com.easyexam.security.utils.AuthenticationUtils;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.validation.Valid;
+
+import com.easyexam.message.request.CreateExamForm;
+import com.easyexam.message.request.PatchExamForm;
 import com.easyexam.message.response.SuccessfulCreation;
+import com.easyexam.model.Course;
+import com.easyexam.model.Exam;
+import com.easyexam.model.Question;
+import com.easyexam.model.Solution;
+import com.easyexam.model.User;
+import com.easyexam.repository.CourseRepository;
+import com.easyexam.repository.ExamRepository;
+import com.easyexam.repository.QuestionRepository;
+import com.easyexam.security.jwt.JwtUtils;
+import com.easyexam.security.utils.AuthenticationUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.util.ReflectionUtils;
-import java.lang.reflect.Field;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,7 +45,10 @@ public class ExamController {
 	private static final Logger log = LoggerFactory.getLogger(ExamController.class);
 
 	@Autowired
-	CourseRepository courseRepository;
+    CourseRepository courseRepository;
+
+	@Autowired
+	QuestionRepository questionRepository;
 
 	@Autowired
 	ExamRepository examRepository;
@@ -102,7 +110,21 @@ public class ExamController {
 	@PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
 	public ResponseEntity<?> createUserExam(@Valid @RequestBody CreateExamForm createExamRequest) {
 
-		Exam exam = new Exam(createExamRequest.getTitle(), createExamRequest.getQuestions());
+        ArrayList<Question> questions = new ArrayList<Question>(createExamRequest.getQuestions().size());
+        
+        for (Question q : createExamRequest.getQuestions()) {
+            if (q.getId() == null) {
+                log.info("Question with no id: ", q.getId());
+                Question question = new Question(q.getContent(), q.getKeywords());
+                question = questionRepository.saveAndFlush(question);
+                questions.add(question);
+            }
+            else {
+                questions.add(q);
+            }
+        }
+
+        Exam exam = new Exam(createExamRequest.getTitle(), questions);
 
 		User user = authenticationUtils.getUserObject();
 		exam.setUser(user);

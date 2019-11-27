@@ -34,7 +34,7 @@ public class Exam extends TimestampedEntity {
 	@JsonIgnore
 	private User user;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToMany(fetch = FetchType.LAZY /*, cascade = { CascadeType.MERGE, CascadeType.PERSIST }*/)
 	@JoinTable(name = "exam_questions", joinColumns = @JoinColumn(name = "exam_id"),
 			inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions = new ArrayList<Question>();

@@ -36,11 +36,11 @@ public class User extends TimestampedEntity {
 	private Integer points;
 
 	@NotBlank
-	@Size(min = 3, max = 50)
+	@Size(min = 1, max = 50)
 	private String firstName;
 
 	@NotBlank
-	@Size(min = 3, max = 50)
+	@Size(min = 1, max = 50)
 	private String lastName;
 
 	@NaturalId

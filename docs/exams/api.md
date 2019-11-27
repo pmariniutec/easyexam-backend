@@ -4,12 +4,14 @@ Exams API Docs
 - Create Exam
     ```
     POST /api/exam/create
+    Note: If the id of a question is specified, then such question will be linked to its representation in the db,
+    otherwise a new question will be created.
     ```
     Expects:
     ```
     {
         "title": "TITLE",
-        "questions": [{"content": "CONTENT" }, {"content": "CONTENT" }, ...],
+        "questions": [{"id": OPTIONAL_ID, "content": "CONTENT"}, {"content": "CONTENT" }, ...],
         "courseId" : "ID" // OPTIONAL
     }
     ```

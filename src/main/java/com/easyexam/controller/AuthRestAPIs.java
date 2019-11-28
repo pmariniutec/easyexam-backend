@@ -69,7 +69,7 @@ public class AuthRestAPIs {
 	public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
 
 		if (userRepository.existsByEmail(registerRequest.getEmail())) {
-			return new ResponseEntity<String>("Error: Email is already in use", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Email is already in use", HttpStatus.BAD_REQUEST);
 		}
 
 		// Creating user account

@@ -6,17 +6,17 @@ import javax.validation.constraints.*;
 
 public class UpdateUserForm {
 
-	@Size(min = 3, max = 50)
+    @Size(min = 1, max = 50, message = "First name length must be between 1 and 50")
 	private String firstName;
 
-	@Size(min = 3, max = 50)
+    @Size(min = 1, max = 50, message = "Last name length must be between 1 and 50")
 	private String lastName;
 
-	@Size(max = 60)
+    @Size(max = 50, message = "Email length must be at most 50")
 	@Email
 	private String email;
 
-	@Size(min = 6, max = 40)
+    @Size(min = 6, max = 100, message = "Password length must be between 6 and 100")
 	private String password;
 
 	private int points;

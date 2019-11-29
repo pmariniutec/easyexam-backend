@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class ForgotPasswordForm {
 	@NotBlank
-	@Size(min = 3, max = 60)
+    @Size(max = 50, message = "Email length must be at most 50")
 	private String email;
 
 	public String getEmail() {

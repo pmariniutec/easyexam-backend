@@ -29,11 +29,11 @@ public class Course extends TimestampedEntity {
 	private Long id;
 
 	@NotBlank
-	@Size(min = 1, max = 60)
+    @Size(min = 1, max = 60, message = "Course name length must be between 1 and 60")
 	private String name;
 
 	@NotBlank
-	@Size(min = 5, max = 20)
+    @Size(min = 5, max = 20, message = "Course code length must be between 5 and 20")
 	private String code;
 
 	@JsonIgnore

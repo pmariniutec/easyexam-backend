@@ -9,11 +9,11 @@ import javax.validation.constraints.*;
 public class CreateCourseForm {
 
 	@NotBlank
-	@Size(min = 1, max = 60)
+    @Size(min = 1, max = 60, message = "Course name length must be between 1 and 60")
 	private String name;
 
 	@NotBlank
-	@Size(min = 5, max = 20)
+    @Size(min = 4, max = 20, message = "Course code length must be between 4 and 20")
 	private String code;
 
 	private User user;

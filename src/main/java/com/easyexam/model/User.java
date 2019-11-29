@@ -35,23 +35,23 @@ public class User extends TimestampedEntity {
 	@Range(min = 0)
 	private Integer points;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
-	private String firstName;
+    @NotBlank
+    @Size(min = 1, max = 50, message = "First name length must be between 1 and 50")
+    private String firstName;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
+    @NotBlank
+    @Size(min = 1, max = 50, message = "Last name length must be between 1 and 50")
 	private String lastName;
 
 	@NaturalId
 	@NotBlank
-	@Size(max = 50)
+    @Size(max = 50, message = "Email length must be at most 50")
 	@Email
 	private String email;
 
 	@NotBlank
 	@JsonIgnore
-	@Size(min = 6, max = 100)
+    @Size(min = 6, max = 100, message = "Password length must be between 6 and 100")
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)

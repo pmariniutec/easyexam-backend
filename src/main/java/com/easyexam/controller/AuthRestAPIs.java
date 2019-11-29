@@ -35,11 +35,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestAPIs {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthRestAPIs.class);
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -135,6 +139,8 @@ public class AuthRestAPIs {
         final int serverPort = request.getServerPort();
         String url;
 
+        log.info(request.getRequestURI());
+
         if ((serverPort == 80) || (serverPort == 443)) {
           // No need to add the server port for standard HTTP and HTTPS ports, the scheme will help determine it.
             url = String.format("%s://%s", request.getScheme(), request.getServerName());
@@ -151,9 +157,7 @@ public class AuthRestAPIs {
 
         passwordResetEmail.setText(
                 "Your new credentials are:\n\t- email: " + form.getEmail() + "\n\t- password: " + tempPassword
-                        + "\n\nFor safety reasons you should change this password as soon as possible.\n\n" +
-                        "Go to: " + url
-                        + "/login");
+                        + "\n\nFor safety reasons you should change this password as soon as possible.\n\n");
         
         mailSender.send(passwordResetEmail);
         return ResponseEntity.ok().body("Successful request. New password sent to email.");

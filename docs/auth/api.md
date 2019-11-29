@@ -38,3 +38,18 @@ Authentication API Docs
 	```
 		Success
 	```
+
+- Reset password
+    ```
+    POST /api/auth/password/reset
+    ```
+    Expects:
+    ```
+    {
+        "email": "EMAIL"
+    }
+    ```
+    Returns:
+    ```
+    Successful request. New password sent to email.
+    ```

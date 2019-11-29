@@ -156,6 +156,6 @@ public class AuthRestAPIs {
                         + "/login");
         
         mailSender.send(passwordResetEmail);
-        return ResponseEntity.ok().body("Successful request. Password sent to email.");
+        return ResponseEntity.ok().body("Successful request. New password sent to email.");
     }
 }
